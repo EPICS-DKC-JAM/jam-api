@@ -19,7 +19,6 @@ public class Consumables {
     private String name;
     private String description;
     private double price;
-    private int category_id;
     private int modifier_id;
     private int size_id;
 
@@ -54,14 +53,6 @@ public class Consumables {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public int getCategory_id() {
-        return category_id;
-    }
-
-    public void setCategory_id(int category_id) {
-        this.category_id = category_id;
     }
 
     public int getModifier_id() {
