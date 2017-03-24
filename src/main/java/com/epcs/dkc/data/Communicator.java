@@ -1,5 +1,6 @@
 package com.epcs.dkc.data;
 
+import org.hibernate.engine.jdbc.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -42,8 +43,27 @@ public class Communicator {
     }
 
     /* ------------ Modifiers ------------ */
+    public String addModifier(String name, String type, String description) {
+        Modifiers modifier = new Modifiers();
+        modifier.setName(name);
+        modifier.setType(type);
+        modifier.setDescription(description);
+
+        modifiersRepository.save(modifier);
+        return "Modifier Saved";
+    }
+
 
     /* ------------ Sizes ------------ */
+
+    public String addSize(String name, int consumableId) {
+        Sizes size = new Sizes();
+        size.setName(name);
+        size.setConsumable_id(consumableId);
+
+        sizesRepository.save(size);
+        return "Size Saved";
+    }
 
 
     public Iterable<Consumables> getAllConsumables() {
