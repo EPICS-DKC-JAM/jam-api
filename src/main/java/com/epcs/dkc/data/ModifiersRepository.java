@@ -7,5 +7,7 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface ModifiersRepository extends CrudRepository<Modifiers, Long> {
 
+    Modifiers findById(int id);
+    Modifiers findByName(String name);
 
 }

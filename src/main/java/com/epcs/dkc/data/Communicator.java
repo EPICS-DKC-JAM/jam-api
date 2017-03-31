@@ -81,6 +81,27 @@ public class Communicator {
         return "Modifier Saved";
     }
 
+    public boolean doesModifierExist(int id) {
+        return modifiersRepository.findById(id) != null;
+    }
+
+    public Modifiers getModifierById(int id) {
+        return modifiersRepository.findById(id);
+    }
+
+    public Modifiers getModifierByName(String name) {
+        return modifiersRepository.findByName(name);
+    }
+
+    public String updateModifier(Modifiers modifier) {
+        if (!doesModifierExist(modifier.getId())) {
+            return "Modifier does not exist!";
+        }
+
+        modifiersRepository.save(modifier);
+        return "Modifier " + modifier.getName() + " updated.";
+    }
+
     public Iterable<Modifiers> getAllModifiers() {
         return modifiersRepository.findAll();
     }
