@@ -117,6 +117,10 @@ public class Communicator {
         return "Size Saved";
     }
 
+    public Sizes getSizeById(int id) {
+        return sizesRepository.findById(id);
+    }
+
     public Iterable<Sizes> getAllSizes() {
         return sizesRepository.findAll();
     }

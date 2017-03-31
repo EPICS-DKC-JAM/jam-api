@@ -7,5 +7,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface SizesRepository extends CrudRepository<Sizes, Long> {
 
+    Sizes findById(int id);
 
 }
