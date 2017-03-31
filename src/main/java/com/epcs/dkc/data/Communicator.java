@@ -32,6 +32,27 @@ public class Communicator {
         return "Consumable Saved";
     }
 
+    public boolean doesConsumableExist(int id) {
+        return consumablesRepository.findById(id) != null;
+    }
+
+    public Consumables getConsumableById(int id) {
+        return consumablesRepository.findById(id);
+    }
+
+    public Consumables getConsumableByName(String name) {
+        return consumablesRepository.findByName(name);
+    }
+
+    public String updateConsumable(Consumables consumable) {
+        if (!doesConsumableExist(consumable.getId())) {
+            return "Consumable does not exist!";
+        }
+
+        consumablesRepository.save(consumable);
+        return "Consumable " + consumable.getName() + " updated.";
+    }
+
     public Iterable<Consumables> getAllConsumables() {
         return consumablesRepository.findAll();
     }

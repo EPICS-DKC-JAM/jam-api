@@ -7,5 +7,7 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface ConsumablesRepository extends CrudRepository<Consumables, Long> {
 
+    Consumables findById(int id);
+    Consumables findByName(String name);
 
 }
