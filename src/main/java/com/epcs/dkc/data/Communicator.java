@@ -66,6 +66,27 @@ public class Communicator {
         return "Category Saved";
     }
 
+    public boolean doesCategoryExist(int id) {
+        return categoriesRepository.findById(id) != null;
+    }
+
+    public Categories getCategoryById(int id) {
+        return categoriesRepository.findById(id);
+    }
+
+    public Categories getCategoryByName(String name) {
+        return categoriesRepository.findByName(name);
+    }
+
+    public String updateCategory(Categories category) {
+        if (!doesCategoryExist(category.getId())) {
+            return "Category does not exist!";
+        }
+
+        categoriesRepository.save(category);
+        return "Category " + category.getName() + " updated.";
+    }
+
     public Iterable<Categories> getAllCategories() {
         return categoriesRepository.findAll();
     }
