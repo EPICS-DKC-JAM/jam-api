@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.ArrayList;
 
 /**
  * Created by shane on 3/24/17.
@@ -13,8 +14,8 @@ public class Sizes {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private int consumable_id;
     private String name;
+    private ArrayList<String> sizes;
 
     public int getId() {
         return id;
@@ -24,19 +25,22 @@ public class Sizes {
         this.id = id;
     }
 
-    public int getConsumable_id() {
-        return consumable_id;
-    }
-
-    public void setConsumable_id(int consumable_id) {
-        this.consumable_id = consumable_id;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setSizes() {
+        sizes = new ArrayList<>();
+        sizes.add("Small");
+        sizes.add("Medium");
+        sizes.add("Large");
+    }
+
+    public ArrayList<String> getSizes() {
+        return sizes;
     }
 }

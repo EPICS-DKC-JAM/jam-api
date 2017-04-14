@@ -3,6 +3,8 @@ package com.epcs.dkc.data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.util.ArrayList;
+
 /**
  * Created by shane on 2/17/17.
  */
@@ -20,14 +22,15 @@ public class Communicator {
     private SizesRepository sizesRepository;
 
     /* ------------ Consumables ------------ */
-    public String addConsumable(String name, String description, double price, int modifier_id, int size_id) {
+    public String addConsumable(String name, String description, double price, int category_id, int modifier_id, int size_id) {
         Consumables consumable = new Consumables();
         consumable.setName(name);
         consumable.setDescription(description);
         consumable.setPrice(price);
         consumable.setModifier_id(modifier_id);
         consumable.setSize_id(size_id);
-
+        consumable.setCateogry_id(category_id)
+        ;
         consumablesRepository.save(consumable);
         return "Consumable Saved";
     }
@@ -61,6 +64,9 @@ public class Communicator {
     public String addCategory(String name) {
         Categories category = new Categories();
         category.setName(name);
+
+        category.setConsumables(new ArrayList<>());
+        category.getConsumables().add(1);
 
         categoriesRepository.save(category);
         return "Category Saved";
@@ -98,6 +104,14 @@ public class Communicator {
         modifier.setType(type);
         modifier.setDescription(description);
 
+        //TODO temp hack for demo
+        modifier.setItems(new ArrayList<String>());
+        modifier.getItems().add("Hot");
+        modifier.getItems().add("Cold");
+
+        modifier.setPrices(new ArrayList<String>());
+        modifier.getPrices().add("0.00");
+        modifier.getPrices().add("0.00");
         modifiersRepository.save(modifier);
         return "Modifier Saved";
     }
@@ -129,10 +143,11 @@ public class Communicator {
 
     /* ------------ Sizes ------------ */
 
-    public String addSize(String name, int consumableId) {
+    // TODO Needs to be reworked
+
+    public String addSize(String name, String sizes) {
         Sizes size = new Sizes();
-        size.setName(name);
-        size.setConsumable_id(consumableId);
+        size.setSizes();
 
         sizesRepository.save(size);
         return "Size Saved";

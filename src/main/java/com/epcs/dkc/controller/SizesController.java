@@ -25,8 +25,8 @@ public class SizesController {
     private Communicator dataCommunicator;
 
     @RequestMapping(path="/add")
-    public @ResponseBody String addNewSize(@RequestParam String name, @RequestParam int consumable_id) {
-        return dataCommunicator.addSize(name, consumable_id);
+    public @ResponseBody String addNewSize(@RequestParam String name, @RequestParam String sizes) {
+        return dataCommunicator.addSize(name, sizes);
     }
 
     @RequestMapping(path="/getById")

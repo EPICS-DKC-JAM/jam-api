@@ -22,6 +22,11 @@ public class ModifiersController {
         return dataCommunicator.getAllModifiers();
     }
 
+    @GetMapping(path="/add")
+    public @ResponseBody String add(@RequestParam String name, @RequestParam String type, @RequestParam String description) {
+        return dataCommunicator.addModifier(name, type, description);
+    }
+
     @GetMapping(path="/getByName")
     public @ResponseBody Modifiers getByName(@RequestParam String name) {
         return dataCommunicator.getModifierByName(name);

@@ -17,6 +17,12 @@ public class ConsumablesController {
     @Autowired
     private Communicator dataCommunicator;
 
+    @GetMapping(path="/add")
+    public @ResponseBody String addNewConsumable(@RequestParam String name, @RequestParam String description, @RequestParam double price,
+                                                 @RequestParam int category_id, @RequestParam int modifier_id, @RequestParam int size_id) {
+        return dataCommunicator.addConsumable(name, description, price, category_id, modifier_id, size_id);
+    }
+
     @GetMapping(path="/all")
     public @ResponseBody Iterable<Consumables> getAllConsumables() {
         return dataCommunicator.getAllConsumables();

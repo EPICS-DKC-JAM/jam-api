@@ -21,6 +21,7 @@ public class Consumables {
     private double price;
     private int modifier_id;
     private int size_id;
+    private int cateogry_id;
 
 
     public int getId() {
@@ -69,5 +70,13 @@ public class Consumables {
 
     public void setSize_id(int size_id) {
         this.size_id = size_id;
+    }
+
+    public int getCateogry_id() {
+        return cateogry_id;
+    }
+
+    public void setCateogry_id(int cateogry_id) {
+        this.cateogry_id = cateogry_id;
     }
 }
