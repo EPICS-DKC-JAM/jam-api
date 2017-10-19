@@ -30,6 +30,8 @@ router.post('/add', function (request, response) {
 });
 
 router.get('/get/:id', function (request, response) {
+    response.header("Access-Control-Allow-Origin", "*");
+
     if (request.params.id == 'all') {
         Consumable.find(function (err, result) {
             if (err) {
