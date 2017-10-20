@@ -9,6 +9,8 @@ var index = require('./routes/index');
 var consumables = require('./routes/consumables');
 var modifiers = require('./routes/modifiers');
 var sizes = require('./routes/sizes');
+var mongoose = require('mongoose');
+var autoIncrement = require('mongoose-auto-increment');
 
 
 var app = express();
@@ -29,6 +31,12 @@ app.use('/', index);
 app.use('/consumables', consumables);
 app.use('/modifiers', modifiers);
 app.use('/sizes', sizes);
+
+
+// Connect to Mongo
+var mongoUrl = 'mongodb://localhost:27017/jam';
+mongoose.connect(mongoUrl);
+autoIncrement.initialize(mongoose);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
