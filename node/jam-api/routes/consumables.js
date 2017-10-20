@@ -91,11 +91,13 @@ router.get('/testAdd', function (req, res) {
         'jslImage': 'https://www.deafcancoffee.com/images/portfolio/IMG_6369.JPG',
         'itemImage': 'https://www.deafcancoffee.com/images/portfolio/IMG_6369.JPG',
         'caffeine': true,
-        'modifiers': -1,
-        'size:': -1
+        'modifiers': 0,
+        'size:': 0
     };
 
+
     saveConsumable(jamaicanJoe);
+
 
     res.json({'status': 'OK'})
 });
