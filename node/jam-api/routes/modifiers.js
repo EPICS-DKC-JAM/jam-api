@@ -4,10 +4,10 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var autoIncrement = require('mongoose-auto-increment');
 var mongoUrl = 'mongodb://localhost:27017/jam';
+var exports = module.exports = router;
 
-mongoose.connect(mongoUrl);
-autoIncrement.initialize(mongoose);
 
+// Mongo declarations
 var ModifierSchema = new mongoose.Schema({
     'modifiers': Array
 });
@@ -15,10 +15,12 @@ var ModifierSchema = new mongoose.Schema({
 ModifierSchema.plugin(autoIncrement.plugin, 'Modifier');
 var Modifier = mongoose.model('Modifier', ModifierSchema);
 
+
+// Modifiers Rest API Calls
 router.post('/add', function (request, response) {
     console.log(request.body);
     var data = request.body.data;
-    var status = saveModifier(data);
+    var status = saveModifiers(data);
     response.json({'data': data, 'success': status})
 });
 
@@ -48,23 +50,25 @@ router.get('/testAdd', function (req, res) {
         'modifiers': ['mocha', 'vanilla', 'ice', 'no ice']
     };
 
-    saveModifier(modifiers);
+    saveModifiers(modifiers);
 
     res.json({'status': 'OK'})
 });
 
-function getModifierById(id) {
+
+// Modifiers Controller Calls
+exports.getModifiersById = function (id, callback) {
     Modifier.findById(id, function (err, result) {
         if (err) {
             console.error(err);
-            return null;
+            callback(null);
         }
-        return result
+        callback(result)
     });
-}
+};
 
 
-function saveModifier(modifier) {
+exports.saveModifiers = function (modifier) {
     var ModifierToSave = new Modifier(modifier);
     ModifierToSave.save(function (err) {
         if (err) {
@@ -76,6 +80,5 @@ function saveModifier(modifier) {
             return true;
         }
     });
-}
+};
 
-module.exports = router;
