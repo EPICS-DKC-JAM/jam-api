@@ -50,7 +50,7 @@ router.get('/testAdd', function (req, res) {
         'modifiers': ['mocha', 'vanilla', 'ice', 'no ice']
     };
 
-    saveModifiers(modifiers);
+    exports.saveModifiers(modifiers);
 
     res.json({'status': 'OK'})
 });

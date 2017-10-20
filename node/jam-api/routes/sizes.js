@@ -47,7 +47,7 @@ router.get('/testAdd', function (req, res) {
         'sizes': ['small', 'medium', 'large']
     };
 
-    saveSize(sizes);
+    exports.saveSize(sizes);
 
     res.json({'status': 'OK'})
 });
