@@ -18,7 +18,7 @@ Below are the current endpoints along with an example response, as well as neede
 
 ### Consumables (/consumables)
 
-####/get/{specifier} (GET)
+#### /get/{specifier} (GET)
 
 This method gets consumables. {specifier} can either be the consumable id or "all" to get all consumables.
 If "all", returns a list of consumables, otherwise just a single object.
@@ -48,7 +48,7 @@ Sample Response
 }
 ```
 
-####/add (POST)
+#### /add (POST)
 
 Adds a consumable to the database.
 
@@ -83,7 +83,7 @@ Sample Response
 
 ### Sizes (/sizes)
 
-####/get/{specifier} (GET)
+#### /get/{specifier} (GET)
 
 This method gets sizes. {specifier} can either be the size id or "all" to get all sizes.
 If "all", returns a list of sizes, otherwise just a single object.
@@ -101,7 +101,7 @@ Sample Response
 }
 ```
 
-####/add (POST)
+#### /add (POST)
 
 Adds a consumable to the database.
 
@@ -122,7 +122,7 @@ Sample Response
 
 ### Modifiers (/modifiers)
 
-####/get/{specifier} (GET)
+#### /get/{specifier} (GET)
 
 This method gets modifiers. {specifier} can either be the modifier id or "all" to get all modifiers.
 If "all", returns a list of modifiers, otherwise just a single object.
@@ -141,7 +141,7 @@ Sample Response
 }
 ```
 
-####/add (POST)
+#### /add (POST)
 
 Adds a consumable to the database.
 
