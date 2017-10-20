@@ -3,11 +3,10 @@ var router = express.Router();
 
 var mongoose = require('mongoose');
 var autoIncrement = require('mongoose-auto-increment');
-var mongoUrl = 'mongodb://localhost:27017/jam';
+var exports = module.exports = router;
 
-mongoose.connect(mongoUrl);
-autoIncrement.initialize(mongoose);
 
+// Mongo Declarations
 var SizeSchema = new mongoose.Schema({
     'sizes': Array
 });
@@ -53,18 +52,21 @@ router.get('/testAdd', function (req, res) {
     res.json({'status': 'OK'})
 });
 
-function getSizeById(id) {
+
+// Sizes Controller Calls
+exports.getSizeById = function (id, callback) {
     Size.findById(id, function (err, result) {
         if (err) {
             console.error(err);
             return null;
         }
-        return result
+
+        callback(result)
     });
-}
+};
 
 
-function saveSize(size) {
+exports.saveSize = function (size) {
     var SizeToSave = new Size(size);
     SizeToSave.save(function (err) {
         if (err) {
@@ -76,6 +78,5 @@ function saveSize(size) {
             return true;
         }
     });
-}
+};
 
-module.exports = router;
