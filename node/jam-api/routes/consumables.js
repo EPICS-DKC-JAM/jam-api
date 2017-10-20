@@ -1,13 +1,14 @@
 var express = require('express');
 var router = express.Router();
-
 var mongoose = require('mongoose');
+var responseBuilder = require('./responseBuilder');
 var autoIncrement = require('mongoose-auto-increment');
-var mongoUrl = 'mongodb://localhost:27017/jam';
+var sizes = require('./sizes');
+var modifiers = require('./modifiers');
+var jsonify = require('jsonify');
 
-mongoose.connect(mongoUrl);
-autoIncrement.initialize(mongoose);
 
+// Mongo Object Declaration
 var ConsumableSchema = new mongoose.Schema({
     'name': String,
     'description': String,
@@ -16,37 +17,67 @@ var ConsumableSchema = new mongoose.Schema({
     'itemImage': String,
     'caffeine': Boolean,
     'modifiers': Number,
-    'size:': Number
+    'size': Number
 });
+
 
 ConsumableSchema.plugin(autoIncrement.plugin, 'Consumable');
 var Consumable = mongoose.model('Consumable', ConsumableSchema);
 
+// Add consumable to database
 router.post('/add', function (request, response) {
     console.log(request.body);
     var data = request.body.data;
     var status = saveConsumable(data);
-    response.json({'data': data, 'success': status})
+    var payload = responseBuilder.buildResponse(response, null, 'error');
+
+    payload = responseBuilder.buildResponse(response, data, 'success');
+    response.json(payload)
 });
 
+// Get consumables from database
 router.get('/get/:id', function (request, response) {
     response.header("Access-Control-Allow-Origin", "*");
+    var payload = responseBuilder.buildResponse(response, null, 'error');
 
     if (request.params.id == 'all') {
         Consumable.find(function (err, result) {
             if (err) {
                 console.error(err);
-                response.json({'data': null, 'success': false})
+                payload = responseBuilder.buildResponse(response, 'Error getting consumable', 'error', err);
+                response.json(payload);
             }
-            response.json({'data': result, 'success': true})
+
+            var newResult = [];
+            var waiting = 0;
+            for (var i = 0; i < result.length; i++) {
+                waiting++;
+                prepareConsumable(result[i].toObject(), function (res) {
+                    waiting--;
+                    newResult.push(res);
+                    complete();
+                });
+            }
+
+            var complete = function () {
+                if (waiting == 0) {
+                    payload = responseBuilder.buildResponse(response, newResult, 'success');
+                    response.json(payload)
+                }
+            };
         });
     } else {
         Consumable.findById(request.params.id, function (err, result) {
             if (err) {
                 console.error(err);
-                response.json({'data': null, 'success': false})
+                payload = responseBuilder.buildResponse(response, 'Error getting consumable', 'error', err);
+                response.json(payload);
             }
-            response.json({'data': result, 'success': true})
+
+            prepareConsumable(result.toObject(), function (res) {
+                payload = responseBuilder.buildResponse(response, res, 'success');
+                response.json(payload)
+            });
         });
     }
 });
@@ -68,6 +99,21 @@ router.get('/testAdd', function (req, res) {
 
     res.json({'status': 'OK'})
 });
+
+
+function prepareConsumable(consumable, callback) {
+    var sizeId = consumable.size;
+    var modifiersId = consumable.modifiers;
+
+    sizes.getSizeById(sizeId, function (sizeResult) {
+        modifiers.getModifiersById(modifiersId, function (modifiersResult) {
+            consumable.size = sizeResult.sizes;
+            consumable.modifiers = modifiersResult.modifiers;
+            callback(consumable);
+        })
+    });
+    //consumable.modifers = modifiers.getModifiersById(modifiersId);
+}
 
 
 function saveConsumable(consumable) {
