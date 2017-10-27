@@ -15,6 +15,8 @@ var autoIncrement = require('mongoose-auto-increment');
 
 var app = express();
 
+var config = require('./config');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -34,7 +36,7 @@ app.use('/sizes', sizes);
 
 
 // Connect to Mongo
-var mongoUrl = 'mongodb://localhost:27017/jam';
+var mongoUrl = config.mongoUrl;
 mongoose.connect(mongoUrl);
 autoIncrement.initialize(mongoose);
 
