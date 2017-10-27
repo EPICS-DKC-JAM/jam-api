@@ -23,7 +23,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
   "engines": {
     "node": "8.6.0"
   }
