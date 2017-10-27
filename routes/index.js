@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
-
+var config = require('../config');
 var mongoose = require('mongoose');
 var autoIncrement = require('mongoose-auto-increment');
-var mongoUrl = 'mongodb://localhost:27017/jam';
+
+var mongoUrl = config.mongoUrl;
 
 mongoose.connect(mongoUrl);
 autoIncrement.initialize(mongoose);
