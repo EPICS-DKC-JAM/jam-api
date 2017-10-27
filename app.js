@@ -34,6 +34,7 @@ app.use('/consumables', consumables);
 app.use('/modifiers', modifiers);
 app.use('/sizes', sizes);
 
+app.set('port', (process.env.PORT || 3000));
 
 // Connect to Mongo
 var mongoUrl = config.mongoUrl;
