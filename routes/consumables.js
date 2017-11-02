@@ -40,16 +40,24 @@ router.post('/upsert', function (request, response) {
     var data = request.body.data;
     var query = {'_id': data._id};
 
-    Consumable.findOneAndUpdate(query, data, {upsert: true}, function (err, doc) {
-        var payload = responseBuilder.buildResponse(response, err, 'error');
+    if (data._id) {
+        var status = saveConsumable(data);
+        var payload = responseBuilder.buildResponse(response, null, 'error');
 
-        if (err) {
-            response.json(payload)
-        } else {
-            payload = responseBuilder.buildResponse(response, data, 'success');
-            response.json(payload)
-        }
-    });
+        payload = responseBuilder.buildResponse(response, data, 'success');
+        response.json(payload)
+    } else {
+        Consumable.findOneAndUpdate(query, data, {upsert: false}, function (err, doc) {
+            var payload = responseBuilder.buildResponse(response, err, 'error');
+
+            if (err) {
+                response.json(payload)
+            } else {
+                payload = responseBuilder.buildResponse(response, data, 'success');
+                response.json(payload)
+            }
+        });
+    }
 });
 
 // Get consumables raw from database

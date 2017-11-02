@@ -24,6 +24,7 @@
         <div ng-repeat="consumable in consumables">
             <button class="btn btn-primary" ng-click="openConsumable(consumable)">Edit {{ consumable.name }}</button>
         </div>
+        <button class="btn btn-primary" ng-click="openConsumable({})">Add Consumable {{ consumable.name }}</button>
     </div>
 
     <modal visible="showConsumableModal">
