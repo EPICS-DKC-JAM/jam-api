@@ -35,6 +35,49 @@ router.post('/add', function (request, response) {
     response.json(payload)
 });
 
+router.post('/upsert', function (request, response) {
+    console.log(request.body);
+    var data = request.body.data;
+    var query = {'_id': data._id};
+
+    Consumable.findOneAndUpdate(query, data, {upsert: true}, function (err, doc) {
+        var payload = responseBuilder.buildResponse(response, err, 'error');
+
+        if (err) {
+            response.json(payload)
+        } else {
+            payload = responseBuilder.buildResponse(response, data, 'success');
+            response.json(payload)
+        }
+    });
+});
+
+// Get consumables raw from database
+router.get('/getRaw/:id', function (request, response) {
+    response.header("Access-Control-Allow-Origin", "*");
+    var payload = responseBuilder.buildResponse(response, null, 'error');
+
+    if (request.params.id == 'all') {
+        Consumable.find(function (err, result) {
+            if (err) {
+                console.error(err);
+                response.json(payload)
+            }
+            payload = responseBuilder.buildResponse(response, result, 'success');
+            response.json(payload)
+        });
+    } else {
+        Consumable.findById(request.params.id, function (err, result) {
+            if (err) {
+                console.error(err);
+                response.json(payload)
+            }
+            payload = responseBuilder.buildResponse(response, result, 'success');
+            response.json(payload)
+        });
+    }
+});
+
 // Get consumables from database
 router.get('/get/:id', function (request, response) {
     response.header("Access-Control-Allow-Origin", "*");
