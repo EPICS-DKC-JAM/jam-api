@@ -33,18 +33,19 @@ app.use('/', index);
 app.use('/consumables', consumables);
 app.use('/modifiers', modifiers);
 app.use('/sizes', sizes);
-
-app.set('port', (process.env.PORT || 3000));
-app.get('/', function(request, response) {
-  var result = 'App is running'
-  response.send(result);
-}).listen(app.get('port'), function() {
-  console.log('App is running, server is listening on port ', app.get('port'));
-});
+//
+//app.set('port', (process.env.PORT || 3000));
+//app.get('/', function(request, response) {
+//  var result = 'App is running'
+//  response.send(result);
+//}).listen(app.get('port'), function() {
+//  console.log('App is running, server is listening on port ', app.get('port'));
+//});
 
 // Connect to Mongo
 var mongoUrl = config.mongoUrl;
 mongoose.connect(mongoUrl);
+console.log('Connecting to mongo at ' + mongoUrl);
 autoIncrement.initialize(mongoose);
 
 // catch 404 and forward to error handler

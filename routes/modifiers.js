@@ -3,7 +3,6 @@ var router = express.Router();
 
 var mongoose = require('mongoose');
 var autoIncrement = require('mongoose-auto-increment');
-var mongoUrl = 'mongodb://localhost:27017/jam';
 var exports = module.exports = router;
 
 
@@ -20,7 +19,7 @@ var Modifier = mongoose.model('Modifier', ModifierSchema);
 router.post('/add', function (request, response) {
     console.log(request.body);
     var data = request.body.data;
-    var status = saveModifiers(data);
+    var status = exports.saveModifiers(data);
     response.json({'data': data, 'success': status})
 });
 
