@@ -17,7 +17,7 @@ var Size = mongoose.model('Size', SizeSchema);
 router.post('/add', function (request, response) {
     console.log(request.body);
     var data = request.body.data;
-    var status = saveSize(data);
+    var status = exports.saveSize(data);
     response.json({'data': data, 'success': status})
 });
 
