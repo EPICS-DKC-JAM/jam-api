@@ -1,0 +1,22 @@
+{
+  "name": "jam-api",
+  "description": "",
+  "main": "app.js",
+  "authors": [
+    "potatoshane <li2137@purdue.edu>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/EPICS-DKC-JAM/jam-api",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-schema-form-bootstrap": "^0.2.0",
+    "bootstrap": "^3.3.7"
+  }
+}
