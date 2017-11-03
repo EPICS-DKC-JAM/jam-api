@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+var responseBuilder = require('./responseBuilder');
 var mongoose = require('mongoose');
 var autoIncrement = require('mongoose-auto-increment');
 var exports = module.exports = router;
@@ -19,6 +19,32 @@ router.post('/add', function (request, response) {
     var data = request.body.data;
     var status = exports.saveSize(data);
     response.json({'data': data, 'success': status})
+});
+
+// Upsert Size
+router.post('/upsert', function (request, response) {
+    console.log(request.body);
+    var data = request.body.data;
+    var query = {'_id': data._id};
+
+    if (!data._id) {
+        var status = exports.saveSize(data);
+        var payload = responseBuilder.buildResponse(response, null, 'error');
+
+        payload = responseBuilder.buildResponse(response, data, 'success');
+        response.json(payload)
+    } else {
+        Size.findOneAndUpdate(query, data, {upsert: false}, function (err, doc) {
+            var payload = responseBuilder.buildResponse(response, err, 'error');
+
+            if (err) {
+                response.json(payload)
+            } else {
+                payload = responseBuilder.buildResponse(response, data, 'success');
+                response.json(payload)
+            }
+        });
+    }
 });
 
 router.get('/get/:id', function (request, response) {

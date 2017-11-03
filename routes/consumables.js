@@ -40,7 +40,7 @@ router.post('/upsert', function (request, response) {
     var data = request.body.data;
     var query = {'_id': data._id};
 
-    if (data._id) {
+    if (!data._id) {
         var status = saveConsumable(data);
         var payload = responseBuilder.buildResponse(response, null, 'error');
 

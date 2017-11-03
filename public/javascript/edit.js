@@ -1,7 +1,7 @@
 angular.module('edit', ['schemaForm'])
     .controller('MainController', function ($scope, $http) {
         $scope.openConsumable = function (item) {
-            console.log($scope.model)
+            console.log($scope.model);
             $scope.showConsumableModal = true;
             $scope.model = item;
         };
@@ -14,13 +14,34 @@ angular.module('edit', ['schemaForm'])
             $scope.consumables = response.data.data;
         });
 
-        $scope.openModifier = function () {
+        $scope.openModifier = function (item) {
+            console.log($scope.model);
             $scope.showModifierModal = true;
+            $scope.model = item;
         };
 
-        $scope.openSize = function () {
+        $http({
+            url: 'modifiers/get/all',
+            method: 'GET'
+        }).then(function (response) {
+            console.log(response.data);
+            $scope.modifiers = response.data.data;
+        });
+
+        $scope.openSize = function (item) {
+            console.log($scope.model);
             $scope.showSizeModal = true;
+            $scope.model = item;
         };
+
+        $http({
+            url: 'sizes/get/all',
+            method: 'GET'
+        }).then(function (response) {
+            console.log(response.data);
+            $scope.sizes = response.data.data;
+        });
+
     })
 
     .controller('ConsumableController', function ($scope, $http) {
@@ -64,6 +85,84 @@ angular.module('edit', ['schemaForm'])
                 }).then(function (response) {
                     console.log(response.data);
                     $scope.consumables = response.data.data;
+                });
+            }
+        }
+    })
+
+    .controller('ModifierController', function ($scope, $http) {
+        $scope.schema = {
+            type: "object",
+            properties: {
+                modifiers: {type: "array", title: "Modifiers", items: {type: "string", minLength: 1, title: "  "}}
+            }
+        };
+
+        $scope.form = [
+            "*",
+            {
+                type: "submit",
+                title: "Save"
+            }
+        ];
+
+        $scope.onSubmit = function (form) {
+            $scope.$broadcast('schemaFormValidate');
+
+            if (form.$valid) {
+                $http({
+                    url: 'modifiers/upsert',
+                    method: 'POST',
+                    data: {data: $scope.model}
+                }).then(function (response) {
+                    console.log(response.data);
+                });
+
+                $http({
+                    url: 'modifiers/get/all',
+                    method: 'GET'
+                }).then(function (response) {
+                    console.log(response.data);
+                    $scope.modifiers = response.data.data;
+                });
+            }
+        }
+    })
+
+    .controller('SizeController', function ($scope, $http) {
+        $scope.schema = {
+            type: "object",
+            properties: {
+                sizes: {type: "array", title: "Sizes", items: {type: "string", minLength: 1, title: "  "}}
+            }
+        };
+
+        $scope.form = [
+            "*",
+            {
+                type: "submit",
+                title: "Save"
+            }
+        ];
+
+        $scope.onSubmit = function (form) {
+            $scope.$broadcast('schemaFormValidate');
+
+            if (form.$valid) {
+                $http({
+                    url: 'sizes/upsert',
+                    method: 'POST',
+                    data: {data: $scope.model}
+                }).then(function (response) {
+                    console.log(response.data);
+                });
+
+                $http({
+                    url: 'sizes/get/all',
+                    method: 'GET'
+                }).then(function (response) {
+                    console.log(response.data);
+                    $scope.sizes = response.data.data;
                 });
             }
         }

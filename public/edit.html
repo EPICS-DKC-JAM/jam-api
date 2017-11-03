@@ -24,12 +24,50 @@
         <div ng-repeat="consumable in consumables">
             <button class="btn btn-primary" ng-click="openConsumable(consumable)">Edit {{ consumable.name }}</button>
         </div>
-        <button class="btn btn-primary" ng-click="openConsumable({})">Add Consumable {{ consumable.name }}</button>
+        <button class="btn btn-primary" ng-click="openConsumable({})">Add Consumable</button>
     </div>
 
     <modal visible="showConsumableModal">
-        <h2>Edit Item</h2>
+        <h2>Edit Consumable</h2>
         <div ng-controller="ConsumableController">
+            <form name="myForm"
+                  sf-schema="schema"
+                  sf-form="form"
+                  sf-model="model"
+                  ng-submit="onSubmit(myForm)"></form>
+        </div>
+    </modal>
+
+    
+    <div class="btn-group">
+        <div ng-repeat="modifier in modifiers">
+            <button class="btn btn-primary" ng-click="openModifier(modifier)">Edit Modifier {{ modifier._id }}</button>
+        </div>
+        <button class="btn btn-primary" ng-click="openModifier({})">Add Modifier</button>
+    </div>
+
+    <modal visible="showModifierModal">
+        <h2>Edit Modifier {{ model._id }}</h2>
+        <div ng-controller="ModifierController">
+            <form name="myForm"
+                  sf-schema="schema"
+                  sf-form="form"
+                  sf-model="model"
+                  ng-submit="onSubmit(myForm)"></form>
+        </div>
+    </modal>
+
+
+    <div class="btn-group">
+        <div ng-repeat="size in sizes">
+            <button class="btn btn-primary" ng-click="openSize(size)">Edit Size {{ size._id }}</button>
+        </div>
+        <button class="btn btn-primary" ng-click="openSize({})">Add Size</button>
+    </div>
+
+    <modal visible="showSizeModal">
+        <h2>Edit Size {{ model._id }}</h2>
+        <div ng-controller="SizeController">
             <form name="myForm"
                   sf-schema="schema"
                   sf-form="form"
