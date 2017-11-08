@@ -54,6 +54,16 @@ router.get('/testAdd', function (req, res) {
     res.json({'status': 'OK'})
 });
 
+router.get('/delete/:id', function(request, response) {
+    var query = {'_id': id};
+    Modifier.remove(query, function (err, result) {
+        if (err) {
+            console.log(err);
+            response.json({'data': null, 'success': false})
+        }
+        response.json({'data': result, 'success': true})
+    });
+});
 
 // Modifiers Controller Calls
 exports.getModifiersById = function (id, callback) {
@@ -65,7 +75,6 @@ exports.getModifiersById = function (id, callback) {
         callback(result)
     });
 };
-
 
 exports.saveModifiers = function (modifier) {
     var ModifierToSave = new Modifier(modifier);

@@ -133,8 +133,18 @@ router.get('/get/:id', function (request, response) {
     }
 });
 
-router.get('/testAdd', function (req, res) {
+router.get('/delete/:id', function(request, response) {
+    var query = {'_id': id};
+    Consumable.remove(query, function (err, result) {
+        if (err) {
+            console.log(err);
+            response.json({'data': null, 'success': false})
+        }
+        response.json({'data': result, 'success': true})
+    });
+});
 
+router.get('/testAdd', function (req, res) {
     var jamaicanJoe = {
         'name': 'Cup of Jamaican Joe',
         'description': 'The cup of Jamaican Joe is our rendition of the classic cup of Joe, one of the most popular drinks in the world. It has a slightly nutty, mellow flavor, as well as acidic, sweet, and winey nuances.',
@@ -152,6 +162,7 @@ router.get('/testAdd', function (req, res) {
 
     res.json({'status': 'OK'})
 });
+
 
 
 function prepareConsumable(consumable, callback) {
