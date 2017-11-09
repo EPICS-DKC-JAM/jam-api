@@ -13,6 +13,7 @@ autoIncrement.initialize(mongoose);
 
 /* GET home page. */
 router.post('/auth', function (req, res) {
+
     User.findOne({
         username: req.body.username
     }, function (err, user) {
@@ -45,6 +46,7 @@ router.use(function (req, res, next) {
     if (config.env == 'dev') {
         next();
     } else {
+        console.log(req.headers);
         var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
         if (token) {

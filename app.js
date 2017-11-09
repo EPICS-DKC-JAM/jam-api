@@ -15,6 +15,7 @@ var autoIncrement = require('mongoose-auto-increment');
 var User = require('./routes/user');
 var users = require('./routes/users');
 var auth = require('./routes/auth');
+var corser = require("corser");
 
 var app = express();
 
@@ -32,6 +33,11 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
+
+// CORS
+app.use(corser.create({
+    requestHeaders: corser.simpleRequestHeaders.concat(["x-access-token"])
+}));
 
 // Public APIs
 app.use('/', index);

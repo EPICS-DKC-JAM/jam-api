@@ -10,6 +10,7 @@
     "body-parser": "~1.18.2",
     "bower": "^1.8.2",
     "cookie-parser": "~1.4.3",
+    "corser": "^2.0.1",
     "debug": "~2.6.9",
     "express": "~4.15.5",
     "jsonify": "0.0.0",

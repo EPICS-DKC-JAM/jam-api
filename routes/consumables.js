@@ -63,7 +63,6 @@ router.post('/upsert', function (request, response) {
 
 // Get consumables raw from database
 router.get('/getRaw/:id', function (request, response) {
-    response.header("Access-Control-Allow-Origin", "*");
     var payload = responseBuilder.buildResponse(response, null, 'error');
 
     if (request.params.id == 'all') {
@@ -89,7 +88,6 @@ router.get('/getRaw/:id', function (request, response) {
 
 // Get consumables from database
 router.get('/get/:id', function (request, response) {
-    response.header("Access-Control-Allow-Origin", "*");
     var payload = responseBuilder.buildResponse(response, null, 'error');
 
     if (request.params.id == 'all') {
