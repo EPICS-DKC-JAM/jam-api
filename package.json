@@ -13,10 +13,11 @@
     "debug": "~2.6.9",
     "express": "~4.15.5",
     "jsonify": "0.0.0",
+    "jsonwebtoken": "^8.1.0",
     "mongodb": "^2.2.31",
     "mongoose": "^4.12.0",
     "mongoose-auto-increment": "^5.0.1",
-    "morgan": "~1.9.0",
+    "morgan": "^1.9.0",
     "pug": "2.0.0-beta11",
     "serve-favicon": "~2.4.5"
   },

@@ -12,17 +12,7 @@ mongoose.connect(mongoUrl);
 autoIncrement.initialize(mongoose);
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
-    res.send('Welcome to the JAM API home page! There is nothing here. No work has been done. Oops.');
-});
-
-router.get('/get/all', function (req, res) {
-    User.find({}, function (err, users) {
-        res.json(users);
-    });
-});
-
-router.post('/authenticate', function (req, res) {
+router.post('/auth', function (req, res) {
     User.findOne({
         username: req.body.username
     }, function (err, user) {
@@ -48,6 +38,32 @@ router.post('/authenticate', function (req, res) {
             }
         }
     });
+});
+
+// Middleware to verify token
+router.use(function (req, res, next) {
+    if (config.env == 'dev') {
+        next();
+    } else {
+        var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+        if (token) {
+            jwt.verify(token, config.sercret, function (err, decoded) {
+                if (err) {
+                    res.json({success: false, message: 'Failed to authenticate token.'});
+                } else {
+                    req.decoded = decoded;
+                    next();
+                }
+            });
+
+        } else {
+            res.status(403).send({
+                success: false,
+                message: 'No token provided.'
+            });
+        }
+    }
 });
 
 module.exports = router;
