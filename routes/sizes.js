@@ -67,6 +67,17 @@ router.get('/get/:id', function (request, response) {
     }
 });
 
+router.get('/delete/:id', function(request, response) {
+    var query = {'_id': id};
+    Size.remove(query, function (err, result) {
+        if (err) {
+            console.log(err);
+            response.json({'data': null, 'success': false})
+        }
+        response.json({'data': result, 'success': true})
+    });
+});
+
 router.get('/testAdd', function (req, res) {
 
     var sizes = {
