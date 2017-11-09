@@ -29,9 +29,9 @@ router.post('/add', function (request, response) {
     console.log(request.body);
     var data = request.body.data;
     var status = saveConsumable(data);
-    var payload = responseBuilder.buildResponse(response, null, 'error');
+    var payload = responseBuilder.buildResponse(response, null, false);
 
-    payload = responseBuilder.buildResponse(response, data, 'success');
+    payload = responseBuilder.buildResponse(response, data, true);
     response.json(payload)
 });
 
@@ -43,18 +43,18 @@ router.post('/upsert', function (request, response) {
     //
     //if (!data._id) {
     //    var status = saveConsumable(data);
-    //    var payload = responseBuilder.buildResponse(response, null, 'error');
+    //    var payload = responseBuilder.buildResponse(response, null, false);
     //
-    //    payload = responseBuilder.buildResponse(response, data, 'success');
+    //    payload = responseBuilder.buildResponse(response, data, true);
     //    response.json(payload)
     //} else {
         Consumable.findOneAndUpdate(query, data, {upsert: false}, function (err, doc) {
-            var payload = responseBuilder.buildResponse(response, err, 'error');
+            var payload = responseBuilder.buildResponse(response, err, false);
 
             if (err) {
                 response.json(payload)
             } else {
-                payload = responseBuilder.buildResponse(response, data, 'success');
+                payload = responseBuilder.buildResponse(response, data, true);
                 response.json(payload)
             }
         });
@@ -63,7 +63,7 @@ router.post('/upsert', function (request, response) {
 
 // Get consumables raw from database
 router.get('/getRaw/:id', function (request, response) {
-    var payload = responseBuilder.buildResponse(response, null, 'error');
+    var payload = responseBuilder.buildResponse(response, null, false);
 
     if (request.params.id == 'all') {
         Consumable.find(function (err, result) {
@@ -71,7 +71,7 @@ router.get('/getRaw/:id', function (request, response) {
                 console.error(err);
                 response.json(payload)
             }
-            payload = responseBuilder.buildResponse(response, result, 'success');
+            payload = responseBuilder.buildResponse(response, result, true);
             response.json(payload)
         });
     } else {
@@ -80,7 +80,7 @@ router.get('/getRaw/:id', function (request, response) {
                 console.error(err);
                 response.json(payload)
             }
-            payload = responseBuilder.buildResponse(response, result, 'success');
+            payload = responseBuilder.buildResponse(response, result, true);
             response.json(payload)
         });
     }
@@ -88,13 +88,13 @@ router.get('/getRaw/:id', function (request, response) {
 
 // Get consumables from database
 router.get('/get/:id', function (request, response) {
-    var payload = responseBuilder.buildResponse(response, null, 'error');
+    var payload = responseBuilder.buildResponse(response, null, false);
 
     if (request.params.id == 'all') {
         Consumable.find(function (err, result) {
             if (err) {
                 console.error(err);
-                payload = responseBuilder.buildResponse(response, 'Error getting consumable', 'error', err);
+                payload = responseBuilder.buildResponse(response, 'Error getting consumable', false, err);
                 response.json(payload);
             }
 
@@ -111,7 +111,7 @@ router.get('/get/:id', function (request, response) {
 
             var complete = function () {
                 if (waiting == 0) {
-                    payload = responseBuilder.buildResponse(response, newResult, 'success');
+                    payload = responseBuilder.buildResponse(response, newResult, true);
                     response.json(payload)
                 }
             };
@@ -120,12 +120,12 @@ router.get('/get/:id', function (request, response) {
         Consumable.findById(request.params.id, function (err, result) {
             if (err) {
                 console.error(err);
-                payload = responseBuilder.buildResponse(response, 'Error getting consumable', 'error', err);
+                payload = responseBuilder.buildResponse(response, 'Error getting consumable', false, err);
                 response.json(payload);
             }
 
             prepareConsumable(result.toObject(), function (res) {
-                payload = responseBuilder.buildResponse(response, res, 'success');
+                payload = responseBuilder.buildResponse(response, res, true);
                 response.json(payload)
             });
         });

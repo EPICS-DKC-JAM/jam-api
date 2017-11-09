@@ -146,7 +146,7 @@ router.get('/upload', function (request, response) {
             }
         }
     });
-    response.json(responseBuilder.buildResponse(response, 'it worked yo', 'success'));
+    response.json(responseBuilder.buildResponse(response, 'it worked yo', false));
 });
 
 /**

@@ -29,18 +29,18 @@ router.post('/upsert', function (request, response) {
 
     if (!data._id) {
         var status = exports.saveSize(data);
-        var payload = responseBuilder.buildResponse(response, null, 'error');
+        var payload = responseBuilder.buildResponse(response, null, false);
 
-        payload = responseBuilder.buildResponse(response, data, 'success');
+        payload = responseBuilder.buildResponse(response, data, true);
         response.json(payload)
     } else {
         Size.findOneAndUpdate(query, data, {upsert: false}, function (err, doc) {
-            var payload = responseBuilder.buildResponse(response, err, 'error');
+            var payload = responseBuilder.buildResponse(response, err, false);
 
             if (err) {
                 response.json(payload)
             } else {
-                payload = responseBuilder.buildResponse(response, data, 'success');
+                payload = responseBuilder.buildResponse(response, data, true);
                 response.json(payload)
             }
         });
