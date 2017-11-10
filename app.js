@@ -4,7 +4,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var jwt = require('jsonwebtoken');
 
 var index = require('./routes/index');
 var consumables = require('./routes/consumables');
@@ -15,7 +14,8 @@ var autoIncrement = require('mongoose-auto-increment');
 var User = require('./routes/user');
 var users = require('./routes/users');
 var auth = require('./routes/auth');
-var corser = require("corser");
+var corser = require('corser');
+var recommendations = require('./routes/recommendations');
 
 var app = express();
 
@@ -48,6 +48,7 @@ app.use('/consumables', consumables);
 app.use('/modifiers', modifiers);
 app.use('/sizes', sizes);
 app.use('/users', users);
+app.use('/recommendations', recommendations);
 
 // Connect to Mongo
 var mongoUrl = config.mongoUrl;
