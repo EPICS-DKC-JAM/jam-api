@@ -21,7 +21,7 @@ var QuestionSchema = new mongoose.Schema({
 /** Concatenated answer string for retrieving products from backend **/
 var AnswerSchema = new mongoose.Schema({
     _id: String,
-    key: String,
+    keys: [],
     consumableId: Number // item that corresponds to key value
 });
 
@@ -107,12 +107,13 @@ router.get('/upload', function (request, response) {
     var fileName = cwd + '/dummy.csv';
     parseCSV(fileName, function(parsed) {
         if (parsed != null) {
+            console.log(parsed);
             var i, itemsStart;
-            for (i = 0; i < parsed[0].length; i++) {
-                var question = {};
-                var options = [];
-                question.prompt = parsed[0][i];
+            var numQuestions = parsed[0].length;
+            console.log("NUM QUESTIONS: " + numQuestions);
+            for (i = 0; i < numQuestions; i++) {
                 /** Iterate through options for each question until "ITEMS" row is hit **/
+                var options = [];
                 for (j = 2; j < parsed.length; j++) {
                     if (parsed[j][0].startsWith("ITEMS")) {
                         itemsStart = j + 1;
@@ -120,17 +121,20 @@ router.get('/upload', function (request, response) {
                     }
                     options.push(parsed[j][i + 1]);
                 }
+                var question = {};
+                question.prompt = parsed[0][i];
                 question.options = options;
                 question.questionOrder = i;
                 saveQuestion(question);
             }
             for (i = itemsStart; i < parsed.length; i++) {
+                var keys = new Array();
+                for (var j = 1; j < parsed[i].length; j++) {
+                    keys.push(parsed[i][j]);
+                }
                 var answer = {};
                 answer.consumableId = Number(parsed[i][0]);
-                answer.key = "";
-                for (var j = 1; j < parsed[i].length; j++) {
-                    answer.key += parsed[i][j];
-                }
+                answer.keys = keys;
                 saveAnswer(answer);
             }
         }
