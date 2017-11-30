@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Deaf Can! Coffee</title>
+    <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="javascript/login.js"></script>
+    <link rel="stylesheet" href="stylesheets/theme.min.css">
+    <link rel="stylesheet" href="stylesheets/login.css">
+</head>
+<body>
+<div class="container" ng-app="login">
+    <div class="wrapper" ng-controller="loginController">
+        <form ng-submit="onSubmit()" class="form-signin">
+            <h3 class="form-signin-heading">Deaf Can! Coffee App Admin Page</h3>
+
+            <input ng-model="username" type="text" class="form-control" name="Username" placeholder="Username" required="" autofocus=""/>
+            <input ng-model="password" type="password" class="form-control" name="Password" placeholder="Password" required=""/>
+
+            <button class="btn btn-lg btn-primary btn-block" name="Submit" value="Login" type="Submit">Login</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

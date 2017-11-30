@@ -1,4 +1,37 @@
-angular.module('edit', ['schemaForm'])
+var token = '';
+
+angular.module('edit', ['schemaForm', 'ngMaterial'])
+    .controller('loginController', function ($scope, $http) {
+        $scope.loggedIn = false;
+
+        $scope.onSubmit = function () {
+            console.log($scope.username);
+            console.log($scope.password);
+
+            $http({
+                url: '/auth',
+                method: 'POST',
+                data: {username: $scope.username, password: $scope.password}
+            }).then(function (response) {
+                console.log(response.data);
+
+                function onSuccess(token, callback) {
+                    this.token = token;
+                    callback();
+                }
+
+                if (response.data.success) {
+                    onSuccess(response.data.token, function () {
+                        $scope.loggedIn = true;
+                    });
+                } else {
+                    $scope.loggedIn = false;
+                    alert('Invalid Login')
+                }
+            });
+        }
+    })
+
     .controller('MainController', function ($scope, $http) {
         $scope.openConsumable = function (item) {
             console.log($scope.model);
@@ -8,7 +41,8 @@ angular.module('edit', ['schemaForm'])
 
         $http({
             url: 'consumables/getRaw/all',
-            method: 'GET'
+            method: 'GET',
+            headers: {'x-access-token': token}
         }).then(function (response) {
             console.log(response.data);
             $scope.consumables = response.data.data;
@@ -22,7 +56,8 @@ angular.module('edit', ['schemaForm'])
 
         $http({
             url: 'modifiers/get/all',
-            method: 'GET'
+            method: 'GET',
+            headers: {'x-access-token': token}
         }).then(function (response) {
             console.log(response.data);
             $scope.modifiers = response.data.data;
@@ -36,7 +71,8 @@ angular.module('edit', ['schemaForm'])
 
         $http({
             url: 'sizes/get/all',
-            method: 'GET'
+            method: 'GET',
+            headers: {'x-access-token': token}
         }).then(function (response) {
             console.log(response.data);
             $scope.sizes = response.data.data;
@@ -74,17 +110,19 @@ angular.module('edit', ['schemaForm'])
                 $http({
                     url: 'consumables/upsert',
                     method: 'POST',
+                    headers: {'x-access-token': token},
                     data: {data: $scope.model}
                 }).then(function (response) {
                     console.log(response.data);
-                });
-
-                $http({
-                    url: 'consumables/getRaw/all',
-                    method: 'GET'
-                }).then(function (response) {
-                    console.log(response.data);
-                    $scope.consumables = response.data.data;
+                    if (response.data.success) {
+                        $http({
+                            url: 'consumables/getRaw/all',
+                            method: 'GET',
+                            headers: {'x-access-token': token}
+                        }).then(function (response) {
+                            $scope.consumables = response.data.data;
+                        });
+                    }
                 });
             }
         }
@@ -113,17 +151,18 @@ angular.module('edit', ['schemaForm'])
                 $http({
                     url: 'modifiers/upsert',
                     method: 'POST',
+                    headers: {'x-access-token': token},
                     data: {data: $scope.model}
                 }).then(function (response) {
                     console.log(response.data);
-                });
-
-                $http({
-                    url: 'modifiers/get/all',
-                    method: 'GET'
-                }).then(function (response) {
-                    console.log(response.data);
-                    $scope.modifiers = response.data.data;
+                    $http({
+                        url: 'modifiers/get/all',
+                        method: 'GET',
+                        headers: {'x-access-token': token}
+                    }).then(function (response) {
+                        console.log(response.data);
+                        $scope.modifiers = response.data.data;
+                    });
                 });
             }
         }
@@ -152,17 +191,18 @@ angular.module('edit', ['schemaForm'])
                 $http({
                     url: 'sizes/upsert',
                     method: 'POST',
+                    headers: {'x-access-token': token},
                     data: {data: $scope.model}
                 }).then(function (response) {
                     console.log(response.data);
-                });
-
-                $http({
-                    url: 'sizes/get/all',
-                    method: 'GET'
-                }).then(function (response) {
-                    console.log(response.data);
-                    $scope.sizes = response.data.data;
+                    $http({
+                        url: 'sizes/get/all',
+                        method: 'GET',
+                        headers: {'x-access-token': token}
+                    }).then(function (response) {
+                        console.log(response.data);
+                        $scope.sizes = response.data.data;
+                    });
                 });
             }
         }
