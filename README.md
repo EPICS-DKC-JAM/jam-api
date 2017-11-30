@@ -11,6 +11,23 @@ Install dependencies and start server
 npm install
 DEBUG=myapp:* npm start
 ```
+## Configuration Variables
+
+The following configuration variables need to be set when running the app.
+
+#### MONGO_URL
+The url of the mongo database
+#### JAM_SECRET
+Secret that is used to generate our authentication tokens
+#### JAM_ENV
+There are two types of environment, 'dev' and 'prod'. Pretty self explanatory.
+#### JAM_CREATE_DEFAULT
+Whether or not a default admin user should be created. Should be used if the mongo database
+has not be initiated with a default admin user
+#### JAM_DEFAULT_USER (Optional)
+Username for the default admin to be created
+#### JAM_DEFAULT_PASS (Optional)
+Password for the default admin to be created
 
 ## Endpoints
 
