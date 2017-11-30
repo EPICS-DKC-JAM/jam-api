@@ -16,6 +16,7 @@
     "tests"
   ],
   "dependencies": {
+    "angular": "^1.6.7",
     "angular-schema-form-bootstrap": "^0.2.0",
     "bootstrap": "^3.3.7",
     "popper.js": "^1.12.9",
