@@ -17,6 +17,8 @@
   ],
   "dependencies": {
     "angular-schema-form-bootstrap": "^0.2.0",
-    "bootstrap": "^3.3.7"
+    "bootstrap": "^3.3.7",
+    "popper.js": "^1.12.9",
+    "angular-material": "^1.1.5"
   }
 }
