@@ -8,6 +8,8 @@ var sizes = require('./sizes');
 var modifiers = require('./modifiers');
 var jsonify = require('jsonify');
 var path = require('path');
+var multer = require('multer');
+
 
 
 /** Questions for Help Me Decide **/
@@ -27,6 +29,7 @@ var AnswerSchema = new mongoose.Schema({
 
 var Question = mongoose.model('Question', QuestionSchema);
 var Answer = mongoose.model('Answer', AnswerSchema);
+var Multer = multer({dest: 'uploads/'});
 
 /** Get all questions for displaying on the frontend **/
 router.get('/questions/get', function (request, response) {
@@ -99,12 +102,12 @@ router.get('/questions/delete/:id', function (request, response) {
 });
 
 /** Upload an excel document with questions and answers to be parsed **/
-router.get('/upload', function (request, response) {
+router.post('/upload', Multer.single('file'), function (request, response) {
     response.header("Access-Control-Allow-Origin", "*");
     Answer.remove(); // clear out old answers
     Question.remove(); // clear out old questions
-    var cwd = path.dirname(fs.realpathSync(__filename));
-    var fileName = cwd + '/dummy.csv';
+    //var cwd = path.dirname(fs.realpathSync(__filename));
+    var fileName = request.file.path;
     parseCSV(fileName, function(parsed) {
         if (parsed != null) {
             console.log(parsed);

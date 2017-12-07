@@ -16,6 +16,7 @@ var users = require('./routes/users');
 var auth = require('./routes/auth');
 var corser = require('corser');
 var recommendations = require('./routes/recommendations');
+var images = require('./routes/images');
 
 var app = express();
 
@@ -49,6 +50,7 @@ app.use('/modifiers', modifiers);
 app.use('/sizes', sizes);
 app.use('/users', users);
 app.use('/recommendations', recommendations);
+app.use('/images', images);
 
 // Connect to Mongo
 var mongoUrl = config.mongoUrl;
