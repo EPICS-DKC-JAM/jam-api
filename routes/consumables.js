@@ -40,14 +40,14 @@ router.post('/upsert', function (request, response) {
     var data = request.body.data;
     var query = {'_id': data._id};
 
-    //
-    //if (!data._id) {
-    //    var status = saveConsumable(data);
-    //    var payload = responseBuilder.buildResponse(response, null, false);
-    //
-    //    payload = responseBuilder.buildResponse(response, data, true);
-    //    response.json(payload)
-    //} else {
+
+    if (!data._id) {
+        var status = saveConsumable(data);
+        var payload = responseBuilder.buildResponse(response, null, false);
+
+        payload = responseBuilder.buildResponse(response, data, true);
+        response.json(payload)
+    } else {
         Consumable.findOneAndUpdate(query, data, {upsert: false}, function (err, doc) {
             var payload = responseBuilder.buildResponse(response, err, false);
 
@@ -58,7 +58,7 @@ router.post('/upsert', function (request, response) {
                 response.json(payload)
             }
         });
-    //}
+    }
 });
 
 // Get consumables raw from database
@@ -132,14 +132,14 @@ router.get('/get/:id', function (request, response) {
     }
 });
 
-router.get('/delete/:id', function(request, response) {
-    var query = {'_id': id};
+router.get('/delete/:id', function (request, response) {
+    var query = {'_id': request.params.id};
     Consumable.remove(query, function (err, result) {
         if (err) {
             console.log(err);
-            response.json({'data': null, 'success': false})
+            response.json({'data': null, 'status': false})
         }
-        response.json({'data': result, 'success': true})
+        response.json({'data': result, 'status': true})
     });
 });
 
@@ -161,7 +161,6 @@ router.get('/testAdd', function (req, res) {
 
     res.json({'status': 'OK'})
 });
-
 
 
 function prepareConsumable(consumable, callback) {

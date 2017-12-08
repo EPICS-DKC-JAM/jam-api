@@ -44,7 +44,7 @@
         </div>
     </div>
 
-    <div class="container container-fluid" ng-controller="MainController" ng-if="loggedIn">
+    <div class="container container-fluid" ng-controller="MainController as m" ng-if="!loggedIn">
         <!--Stats/Recommendations-->
         <div class="row">
             <div class="col-md-6">
@@ -86,7 +86,11 @@
         <div class="row">
             <div class="col-md-12">
                 <h3>Consumables</h3>
-                <table st-table="displayedCollection" st-safe-src="consumables"
+                <button class="btn btn-success" ng-click="openConsumable({}, true)">
+                    <i class="glyphicon glyphicon-plus">
+                    </i> Add Consumable</button>
+                <p></p>
+                <table ng-controller="ConsumableController" st-table="displayedCollection" st-safe-src="consumables"
                        class="table table-bordered table-hover table-responsive text-center">
                     <thead class="thead-dark">
                     <tr>
@@ -102,11 +106,11 @@
                         <th st-ratio="4" st-sort="SizeID">Size ID</th>
                         <th st-ratio="4" st-sort="Caffeiene">Caffeine</th>
                         <th st-ratio="4" st-sort="Edit"></th>
-
+                        <th st-ratio="4" st-sort="Delete"></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="consumable in displayedCollection">
+                    <tr ng-repeat="consumable in consumables">
                         <td>{{consumable.name}}</td>
                         <td class="text-left">{{consumable.description}}</td>
                         <td>{{consumable.price}}</td>
@@ -114,7 +118,14 @@
                         <td>{{consumable.size}}</td>
                         <td>{{consumable.caffeine}}</td>
                         <td>
-                            <button class="btn btn-primary btn-sm" ng-click="openConsumable(consumable)">Edit
+                            <button class="btn btn-primary btn-sm" ng-click="openConsumable(consumable, false)">Edit
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-sm"
+                                    ng-confirm-click="Are you sure to delete this consumable?"
+                                    confirmed-click="deleteConsumable(consumable._id)" aria-label="close">
+                                <span aria-hidden="true">&times;</span>
                             </button>
                         </td>
                     </tr>
@@ -127,7 +138,7 @@
         <div class="row">
             <div class="col-md-6">
                 <h3>Modifiers</h3>
-                <table st-table="modifiersCollection" st-safe-src="modifiers"
+                <table ng-controller="ModifierController" st-table="modifiersCollection" st-safe-src="modifiers"
                        class="table table-bordered table-hover table-responsive text-center">
                     <thead>
                     <tr>
@@ -136,9 +147,10 @@
                         </th>
                     </tr>
                     <tr>
-                        <th st-ratio="4" st-sort="ModifierID">Modifier ID</th>
+                        <th st-ratio="6" st-sort="ModifierID">Modifier ID</th>
                         <th st-ratio="35" st-sort="Modifiers">Modifiers</th>
                         <th st-ratio="4" st-sort="Edit"></th>
+                        <th st-ratio="4" st-sort="Delete"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -146,7 +158,13 @@
                         <td>{{modifier._id}}</td>
                         <td>{{modifier.modifiers}}</td>
                         <td>
-                            <button class="btn btn-primary btn-sm" ng-click="openModifier(modifier)">Edit</button>
+                            <button class="btn btn-primary btn-sm" ng-click="openModifier(modifier, false)">Edit</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" ng-confirm-click="Are you sure to delete this item?"
+                                    confirmed-click="deleteModifier(modifier._id)" aria-label="close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </td>
                     </tr>
                     </tbody>
@@ -154,7 +172,7 @@
             </div>
             <div class="col-md-6">
                 <h3>Sizes</h3>
-                <table st-table="sizesCollection" st-safe-src="sizes"
+                <table ng-controller="SizeController" st-table="sizesCollection" st-safe-src="sizes"
                        class="table table-bordered table-hover table-responsive text-center">
                     <thead class="thead-dark">
                     <tr>
@@ -166,7 +184,7 @@
                         <th st-ratio="10" st-sort="SizeId">Size Id</th>
                         <th st-ratio="35" st-sort="Sizes">Sizes</th>
                         <th st-ratio="4" st-sort="Edit"></th>
-
+                        <th st-ratio="4" st-sort="Delete"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -174,7 +192,13 @@
                         <td>{{size._id}}</td>
                         <td>{{size.sizes}}</td>
                         <td>
-                            <button class="btn btn-primary btn-sm" ng-click="openSize(size)">Edit</button>
+                            <button class="btn btn-primary btn-sm" ng-click="openSize(size, false)">Edit</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" ng-confirm-click="Are you sure to delete this item?"
+                                    confirmed-click="deleteSize(size._id)" aria-label="close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </td>
                     </tr>
                     </tbody>

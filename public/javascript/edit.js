@@ -20,7 +20,7 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
                     callback();
                 }
 
-                if (response.data.success) {
+                if (response.data.status) {
                     onSuccess(response.data.token, function () {
                         $scope.loggedIn = true;
                     });
@@ -78,6 +78,30 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
             $scope.sizes = response.data.data;
         });
 
+
+        $scope.deleteConsumable = function (id) {
+            $http({
+                url: 'consumables/delete/' + id,
+                method: 'GET',
+                headers: {'x-access-token': token}
+            }).then(function (response) {
+                console.log(response)
+                if (response.data.status) {
+                    $http({
+                        url: 'consumables/getRaw/all',
+                        method: 'GET',
+                        headers: {'x-access-token': token}
+                    }).then(function (response) {
+                        console.log(response.data);
+                        $scope.consumables.length = 0;
+                        angular.extend($scope.consumables, response.data.data);
+                        //$scope.consumables = response.data.data;
+                    });
+                } else {
+
+                }
+            });
+        };
     })
 
     .controller('ConsumableController', function ($scope, $http) {
@@ -103,9 +127,9 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
             }
         ];
 
-        $scope.onSubmit = function (form) {
-            $scope.$broadcast('schemaFormValidate');
 
+        $scope.onSubmit = function (form, add) {
+            $scope.$broadcast('schemaFormValidate');
             if (form.$valid) {
                 $http({
                     url: 'consumables/upsert',
@@ -113,14 +137,16 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
                     headers: {'x-access-token': token},
                     data: {data: $scope.model}
                 }).then(function (response) {
-                    console.log(response.data);
-                    if (response.data.success) {
+                    console.log(response.data.status);
+                    if (response.data.status) {
                         $http({
                             url: 'consumables/getRaw/all',
                             method: 'GET',
                             headers: {'x-access-token': token}
                         }).then(function (response) {
-                            $scope.consumables = response.data.data;
+                            console.log(response.data);
+                            $scope.consumables.length = 0;
+                            angular.extend($scope.consumables, response.data.data);
                         });
                     }
                 });
@@ -144,7 +170,7 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
             }
         ];
 
-        $scope.onSubmit = function (form) {
+        $scope.onSubmit = function (form, add) {
             $scope.$broadcast('schemaFormValidate');
 
             if (form.$valid) {
@@ -184,7 +210,7 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
             }
         ];
 
-        $scope.onSubmit = function (form) {
+        $scope.onSubmit = function (form, add) {
             $scope.$broadcast('schemaFormValidate');
 
             if (form.$valid) {
@@ -209,7 +235,7 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
     })
 
     .controller('RecommendationController', function ($scope, Upload) {
-        $scope.uploadPic = function(file) {
+        $scope.uploadPic = function (file) {
             file.upload = Upload.upload({
                 url: 'recommendations/upload',
                 headers: {'x-access-token': token},
@@ -224,6 +250,21 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
             });
         }
     })
+
+    .directive('ngConfirmClick', [
+        function () {
+            return {
+                link: function (scope, element, attr) {
+                    var msg = attr.ngConfirmClick || "Are you sure?";
+                    var clickAction = attr.confirmedClick;
+                    element.bind('click', function (event) {
+                        if (window.confirm(msg)) {
+                            scope.$eval(clickAction)
+                        }
+                    });
+                }
+            };
+        }])
 
     .directive('modal', function () {
         return {
@@ -280,22 +321,22 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
 
 function bs_input_file() {
     $(".input-file").before(
-        function() {
-            if ( ! $(this).prev().hasClass('input-ghost') ) {
+        function () {
+            if (!$(this).prev().hasClass('input-ghost')) {
                 var element = $("<input type='file' class='input-ghost' style='visibility:hidden; height:0'>");
-                element.attr("name",$(this).attr("name"));
-                element.change(function(){
+                element.attr("name", $(this).attr("name"));
+                element.change(function () {
                     element.next(element).find('input').val((element.val()).split('\\').pop());
                 });
-                $(this).find("button.btn-choose").click(function(){
+                $(this).find("button.btn-choose").click(function () {
                     element.click();
                 });
-                $(this).find("button.btn-reset").click(function(){
+                $(this).find("button.btn-reset").click(function () {
                     element.val(null);
                     $(this).parents(".input-file").find('input').val('');
                 });
-                $(this).find('input').css("cursor","pointer");
-                $(this).find('input').mousedown(function() {
+                $(this).find('input').css("cursor", "pointer");
+                $(this).find('input').mousedown(function () {
                     $(this).parents('.input-file').prev().click();
                     return false;
                 });
@@ -304,6 +345,6 @@ function bs_input_file() {
         }
     );
 }
-$(function() {
+$(function () {
     bs_input_file();
 });
