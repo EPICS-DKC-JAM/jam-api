@@ -138,6 +138,10 @@
         <div class="row">
             <div class="col-md-6">
                 <h3>Modifiers</h3>
+                <button class="btn btn-success" ng-click="openModifier({}, true)">
+                    <i class="glyphicon glyphicon-plus">
+                    </i> Add Modifier</button>
+                <p></p>
                 <table ng-controller="ModifierController" st-table="modifiersCollection" st-safe-src="modifiers"
                        class="table table-bordered table-hover table-responsive text-center">
                     <thead>
@@ -172,6 +176,10 @@
             </div>
             <div class="col-md-6">
                 <h3>Sizes</h3>
+                <button class="btn btn-success" ng-click="openSize({}, true)">
+                    <i class="glyphicon glyphicon-plus">
+                    </i> Add Size</button>
+                <p></p>
                 <table ng-controller="SizeController" st-table="sizesCollection" st-safe-src="sizes"
                        class="table table-bordered table-hover table-responsive text-center">
                     <thead class="thead-dark">
