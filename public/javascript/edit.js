@@ -1,6 +1,6 @@
 var token = '';
 
-angular.module('edit', ['schemaForm', 'ngMaterial'])
+angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload'])
     .controller('loginController', function ($scope, $http) {
         $scope.loggedIn = false;
 
@@ -208,6 +208,23 @@ angular.module('edit', ['schemaForm', 'ngMaterial'])
         }
     })
 
+    .controller('RecommendationController', function ($scope, Upload) {
+        $scope.uploadPic = function(file) {
+            file.upload = Upload.upload({
+                url: 'recommendations/upload',
+                headers: {'x-access-token': token},
+                data: {file: file}
+            });
+
+            console.log(file);
+            file.upload.then(function (response) {
+            }, function (response) {
+                if (response.status > 0)
+                    $scope.errorMsg = response.status + ': ' + response.data;
+            });
+        }
+    })
+
     .directive('modal', function () {
         return {
             template: '<div class="modal fade">' +
@@ -247,5 +264,46 @@ angular.module('edit', ['schemaForm', 'ngMaterial'])
                 });
             }
         };
+    })
+
+    .directive('stRatio', function () {
+        return {
+            link: function (scope, element, attr) {
+                var ratio = +(attr.stRatio);
+
+                element.css('width', ratio + '%');
+
+            }
+        };
     });
 
+
+function bs_input_file() {
+    $(".input-file").before(
+        function() {
+            if ( ! $(this).prev().hasClass('input-ghost') ) {
+                var element = $("<input type='file' class='input-ghost' style='visibility:hidden; height:0'>");
+                element.attr("name",$(this).attr("name"));
+                element.change(function(){
+                    element.next(element).find('input').val((element.val()).split('\\').pop());
+                });
+                $(this).find("button.btn-choose").click(function(){
+                    element.click();
+                });
+                $(this).find("button.btn-reset").click(function(){
+                    element.val(null);
+                    $(this).parents(".input-file").find('input').val('');
+                });
+                $(this).find('input').css("cursor","pointer");
+                $(this).find('input').mousedown(function() {
+                    $(this).parents('.input-file').prev().click();
+                    return false;
+                });
+                return element;
+            }
+        }
+    );
+}
+$(function() {
+    bs_input_file();
+});

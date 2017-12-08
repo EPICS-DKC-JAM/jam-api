@@ -14,17 +14,21 @@
     <script type="text/javascript" src="../bower_components/tv4/tv4.js"></script>
     <script type="text/javascript" src="../bower_components/objectpath/lib/ObjectPath.js"></script>
     <script type="text/javascript" src="../bower_components/angular-schema-form/dist/schema-form.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-smart-table/dist/smart-table.js"></script>
+    <script type="text/javascript" src="../bower_components/bootstrap-fileinput/js/fileinput.min.js"></script>
+    <script type="text/javascript" src="../bower_components/ng-file-upload/ng-file-upload-all.min.js"></script>
+
     <script type="text/javascript"
             src="../bower_components/angular-schema-form/dist/bootstrap-decorator.min.js"></script>
     <script type="text/javascript" src="javascript/edit.js"></script>
     <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="stylesheets/theme.min.css">
-    <link rel="stylesheet" href="../bower_components/angular-material/angular-material.min.css">
-    <link rel="stylesheet" href="stylesheets/login.css">
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+    <!--<link rel="stylesheet" href="stylesheets/theme.min.css">-->
+    <!--<link rel="stylesheet" href="../bower_components/angular-material/angular-material.min.css">-->
 </head>
 <body ng-app="edit">
 <div ng-controller="loginController">
-    <div class="container"  ng-show="!loggedIn">
+    <div class="container" ng-show="loggedIn">
         <div class="wrapper">
             <form ng-submit="onSubmit()" class="form-signin">
                 <h3 class="form-signin-heading">Deaf Can! Coffee App Admin Page</h3>
@@ -40,16 +44,144 @@
         </div>
     </div>
 
-    <div ng-controller="MainController" ng-if="loggedIn">
-
-        <div class="btn-group">
-            <div ng-repeat="consumable in consumables">
-                <button class="btn btn-primary" ng-click="openConsumable(consumable)">Edit {{ consumable.name }}
-                </button>
+    <div class="container container-fluid" ng-controller="MainController" ng-if="!loggedIn">
+        <!--Stats/Recommendations-->
+        <div class="row">
+            <div class="col-md-6">
+                <h3 class="text-center">Deaf Can! Coffee App Admin Page</h3>
+                <p class="text-center">Number of Consumables: <b>{{ consumables.length }}</b></p>
+                <p class="text-center">Number of Modifiers: <b>{{ modifiers.length }}</b></p>
+                <p class="text-center">Number of Sizes: <b>{{ sizes.length }}</b></p>
             </div>
-            <button class="btn btn-primary" ng-click="openConsumable({})">Add Consumable</button>
+            <div class="col-md-6">
+                <h3 class="text-center">Recommendations {{ file.name }}</h3>
+                <form ng-controller="RecommendationController" name="uploadForm">
+                    <div class="form-group">
+                        <div class="input-group input-file">
+                            <input type="text" class="form-control" placeholder="Choose a file..." id="file-info"/>
+                            <span class="input-group-btn">
+                                <button id="file-upload" class="btn btn-default btn-choose" type="button">Choose
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary pull-right" ng-click="upload(csvFile)">Update
+                        </button>
+                        <button type="reset" class="btn btn-danger">Reset</button>
+                    </div>
+                </form>
+
+                <form ng-controller="RecommendationController" name="myForm">
+                    <input type="file" ngf-select ng-model="picFile" name="file"
+                           accept="text/csv" required>
+                    <button class="btn btn-primary" ng-disabled="!myForm.$valid"
+                            ng-click="uploadPic(picFile)">Submit
+                    </button>
+                </form>
+            </div>
         </div>
 
+        <!--Consumables Table-->
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Consumables</h3>
+                <table st-table="displayedCollection" st-safe-src="consumables"
+                       class="table table-bordered table-hover table-responsive text-center">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th colspan="10"><input st-search="" class="form-control" placeholder="Search"
+                                                type="text"/>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th st-ratio="10" st-sort="ItemName">Item Name</th>
+                        <th st-ratio="35" st-sort="Description">Description</th>
+                        <th st-ratio="4" st-sort="Price">Price</th>
+                        <th st-ratio="4" st-sort="ModifierID">Modifier ID</th>
+                        <th st-ratio="4" st-sort="SizeID">Size ID</th>
+                        <th st-ratio="4" st-sort="Caffeiene">Caffeine</th>
+                        <th st-ratio="4" st-sort="Edit"></th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="consumable in displayedCollection">
+                        <td>{{consumable.name}}</td>
+                        <td class="text-left">{{consumable.description}}</td>
+                        <td>{{consumable.price}}</td>
+                        <td>{{consumable.modifiers}}</td>
+                        <td>{{consumable.size}}</td>
+                        <td>{{consumable.caffeine}}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" ng-click="openConsumable(consumable)">Edit
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!--Modifiers/Sizes Table-->
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Modifiers</h3>
+                <table st-table="modifiersCollection" st-safe-src="modifiers"
+                       class="table table-bordered table-hover table-responsive text-center">
+                    <thead>
+                    <tr>
+                        <th colspan="5"><input st-search="" class="form-control" placeholder="Search"
+                                               type="text"/>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th st-ratio="4" st-sort="ModifierID">Modifier ID</th>
+                        <th st-ratio="35" st-sort="Modifiers">Modifiers</th>
+                        <th st-ratio="4" st-sort="Edit"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="modifier in modifiersCollection">
+                        <td>{{modifier._id}}</td>
+                        <td>{{modifier.modifiers}}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" ng-click="openModifier(modifier)">Edit</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <h3>Sizes</h3>
+                <table st-table="sizesCollection" st-safe-src="sizes"
+                       class="table table-bordered table-hover table-responsive text-center">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th colspan="5"><input st-search="" class="form-control" placeholder="Search"
+                                               type="text"/>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th st-ratio="10" st-sort="SizeId">Size Id</th>
+                        <th st-ratio="35" st-sort="Sizes">Sizes</th>
+                        <th st-ratio="4" st-sort="Edit"></th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="size in sizesCollection">
+                        <td>{{size._id}}</td>
+                        <td>{{size.sizes}}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" ng-click="openSize(size)">Edit</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--Modals-->
         <modal visible="showConsumableModal">
             <h2>Edit Consumable</h2>
             <div ng-controller="ConsumableController">
@@ -60,15 +192,6 @@
                       ng-submit="onSubmit(myForm)"></form>
             </div>
         </modal>
-
-
-        <div class="btn-group">
-            <div ng-repeat="modifier in modifiers">
-                <button class="btn btn-primary" ng-click="openModifier(modifier)">Edit Modifier {{ modifier._id }}
-                </button>
-            </div>
-            <button class="btn btn-primary" ng-click="openModifier({})">Add Modifier</button>
-        </div>
 
         <modal visible="showModifierModal">
             <h2>Edit Modifier {{ model._id }}</h2>
@@ -81,14 +204,6 @@
             </div>
         </modal>
 
-
-        <div class="btn-group">
-            <div ng-repeat="size in sizes">
-                <button class="btn btn-primary" ng-click="openSize(size)">Edit Size {{ size._id }}</button>
-            </div>
-            <button class="btn btn-primary" ng-click="openSize({})">Add Size</button>
-        </div>
-
         <modal visible="showSizeModal">
             <h2>Edit Size {{ model._id }}</h2>
             <div ng-controller="SizeController">
@@ -100,6 +215,9 @@
             </div>
         </modal>
     </div>
+
+
+</div>
 </div>
 </body>
 </html>
