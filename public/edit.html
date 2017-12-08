@@ -28,7 +28,7 @@
 </head>
 <body ng-app="edit">
 <div ng-controller="loginController">
-    <div class="container" ng-show="loggedIn">
+    <div class="container" ng-show="!loggedIn">
         <div class="wrapper">
             <form ng-submit="onSubmit()" class="form-signin">
                 <h3 class="form-signin-heading">Deaf Can! Coffee App Admin Page</h3>
@@ -44,7 +44,7 @@
         </div>
     </div>
 
-    <div class="container container-fluid" ng-controller="MainController" ng-if="!loggedIn">
+    <div class="container container-fluid" ng-controller="MainController" ng-if="loggedIn">
         <!--Stats/Recommendations-->
         <div class="row">
             <div class="col-md-6">
