@@ -137,9 +137,9 @@ router.get('/delete/:id', function (request, response) {
     Consumable.remove(query, function (err, result) {
         if (err) {
             console.log(err);
-            response.json({'data': null, 'status': false})
+            response.json({'data': null, 'success': false})
         }
-        response.json({'data': result, 'status': true})
+        response.json({'data': result, 'success': true})
     });
 });
 
@@ -159,7 +159,7 @@ router.get('/testAdd', function (req, res) {
     saveConsumable(jamaicanJoe);
 
 
-    res.json({'status': 'OK'})
+    res.json({'success': 'OK'})
 });
 
 

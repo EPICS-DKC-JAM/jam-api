@@ -20,7 +20,7 @@ router.post('/add', function (request, response) {
     console.log(request.body);
     var data = request.body.data;
     var status = exports.saveModifiers(data);
-    response.json({'data': data, 'status': status})
+    response.json({'data': data, 'success': status})
 });
 
 // Upsert Modifier
@@ -54,17 +54,17 @@ router.get('/get/:id', function (request, response) {
         Modifier.find(function (err, result) {
             if (err) {
                 console.error(err);
-                response.json({'data': null, 'status': false})
+                response.json({'data': null, 'success': false})
             }
-            response.json({'data': result, 'status': true})
+            response.json({'data': result, 'success': true})
         });
     } else {
         Modifier.findById(request.params.id, function (err, result) {
             if (err) {
                 console.error(err);
-                response.json({'data': null, 'status': false})
+                response.json({'data': null, 'success': false})
             }
-            response.json({'data': result, 'status': true})
+            response.json({'data': result, 'success': true})
         });
     }
 });
@@ -77,7 +77,7 @@ router.get('/testAdd', function (req, res) {
 
     exports.saveModifiers(modifiers);
 
-    res.json({'status': 'OK'})
+    res.json({'success': 'OK'})
 });
 
 router.get('/delete/:id', function(request, response) {
@@ -85,9 +85,9 @@ router.get('/delete/:id', function(request, response) {
     Modifier.remove(query, function (err, result) {
         if (err) {
             console.log(err);
-            response.json({'data': null, 'status': false})
+            response.json({'data': null, 'success': false})
         }
-        response.json({'data': result, 'status': true})
+        response.json({'data': result, 'success': true})
     });
 });
 

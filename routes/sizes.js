@@ -18,7 +18,7 @@ router.post('/add', function (request, response) {
     console.log(request.body);
     var data = request.body.data;
     var status = exports.saveSize(data);
-    response.json({'data': data, 'status': status})
+    response.json({'data': data, 'success': status})
 });
 
 // Upsert Size
@@ -52,17 +52,17 @@ router.get('/get/:id', function (request, response) {
         Size.find(function (err, result) {
             if (err) {
                 console.error(err);
-                response.json({'data': null, 'status': false})
+                response.json({'data': null, 'success': false})
             }
-            response.json({'data': result, 'status': true})
+            response.json({'data': result, 'success': true})
         });
     } else {
         Size.findById(request.params.id, function (err, result) {
             if (err) {
                 console.error(err);
-                response.json({'data': null, 'status': false})
+                response.json({'data': null, 'success': false})
             }
-            response.json({'data': result, 'status': true})
+            response.json({'data': result, 'success': true})
         });
     }
 });
@@ -72,9 +72,9 @@ router.get('/delete/:id', function(request, response) {
     Size.remove(query, function (err, result) {
         if (err) {
             console.log(err);
-            response.json({'data': null, 'status': false})
+            response.json({'data': null, 'success': false})
         }
-        response.json({'data': result, 'status': true})
+        response.json({'data': result, 'success': true})
     });
 });
 
@@ -86,7 +86,7 @@ router.get('/testAdd', function (req, res) {
 
     exports.saveSize(sizes);
 
-    res.json({'status': 'OK'})
+    res.json({'success': 'OK'})
 });
 
 

@@ -20,7 +20,7 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
                     callback();
                 }
 
-                if (response.data.status) {
+                if (response.data.success) {
                     onSuccess(response.data.token, function () {
                         $scope.loggedIn = true;
                     });
@@ -86,7 +86,7 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
                 headers: {'x-access-token': token}
             }).then(function (response) {
                 console.log(response)
-                if (response.data.status) {
+                if (response.data.success) {
                     $http({
                         url: 'consumables/getRaw/all',
                         method: 'GET',
@@ -137,8 +137,8 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
                     headers: {'x-access-token': token},
                     data: {data: $scope.model}
                 }).then(function (response) {
-                    console.log(response.data.status);
-                    if (response.data.status) {
+                    console.log(response.data.success);
+                    if (response.data.success) {
                         $http({
                             url: 'consumables/getRaw/all',
                             method: 'GET',
