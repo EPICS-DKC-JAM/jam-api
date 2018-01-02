@@ -14,9 +14,12 @@ var autoIncrement = require('mongoose-auto-increment');
 var User = require('./routes/user');
 var users = require('./routes/users');
 var auth = require('./routes/auth');
+//var location = require('./routes/location');
 var corser = require('corser');
 var recommendations = require('./routes/recommendations');
 var images = require('./routes/images');
+var io = require('socket.io')(server);
+
 
 var app = express();
 
@@ -40,8 +43,18 @@ app.use(corser.create({
     requestHeaders: corser.simpleRequestHeaders.concat(["x-access-token"])
 }));
 
+// Socket IO
+var server = require('http').Server(express);
+io.on('connection', function (socket) {
+    socket.emit('news', { hello: 'world' });
+    socket.on('my other event', function (data) {
+        console.log(data);
+    });
+});
+
 // Public APIs
 app.use('/', index);
+
 app.use('/', auth);
 
 // Secure APIs
@@ -51,6 +64,9 @@ app.use('/sizes', sizes);
 app.use('/users', users);
 app.use('/recommendations', recommendations);
 app.use('/images', images);
+//app.use('/test,', location);
+
+
 
 // Connect to Mongo
 var mongoUrl = config.mongoUrl;

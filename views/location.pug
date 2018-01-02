@@ -1,0 +1,14 @@
+html
+  head
+    title= 'Mobile Location'
+  body
+  .div(style="text-align:center;")
+    if location.traveling
+        h3= 'We are currently mobile, come visit us at:'
+        =location.name
+        br
+        =location.address
+        br
+        =location.city + ' ' + location.country
+    else
+        h3= 'We are currently not travelling, please contact us to see if our E3 Cafe is open.'

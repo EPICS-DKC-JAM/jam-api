@@ -17,13 +17,17 @@
     <script type="text/javascript" src="../bower_components/angular-smart-table/dist/smart-table.js"></script>
     <script type="text/javascript" src="../bower_components/bootstrap-fileinput/js/fileinput.min.js"></script>
     <script type="text/javascript" src="../bower_components/ng-file-upload/ng-file-upload-all.min.js"></script>
+    <script type="text/javascript" src="../bower_components/ng-file-upload/ng-file-upload-all.min.js"></script>
+    <script type="text/javascript" src="../bower_components/ngToast/dist/ngToast.min.js"></script>
+
 
     <script type="text/javascript"
             src="../bower_components/angular-schema-form/dist/bootstrap-decorator.min.js"></script>
     <script type="text/javascript" src="javascript/edit.js"></script>
     <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
-    <!--<link rel="stylesheet" href="stylesheets/theme.min.css">-->
+    <link rel="stylesheet" href="../bower_components/ngToast/dist/ngToast.min.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
     <!--<link rel="stylesheet" href="../bower_components/angular-material/angular-material.min.css">-->
 </head>
 <body ng-app="edit">
@@ -47,11 +51,14 @@
     <div class="container container-fluid" ng-controller="MainController as m" ng-if="loggedIn">
         <!--Stats/Recommendations-->
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6" ng-controller="LocationController">
                 <h3 class="text-center">Deaf Can! Coffee App Admin Page</h3>
                 <p class="text-center">Number of Consumables: <b>{{ consumables.length }}</b></p>
                 <p class="text-center">Number of Modifiers: <b>{{ modifiers.length }}</b></p>
                 <p class="text-center">Number of Sizes: <b>{{ sizes.length }}</b></p>
+                <p class="text-center">Current Location: <b>{{ location.name }}
+                    <button class="btn btn-primary btn-sm" ng-click="openLocation(location, false)">Edit</button>
+                </b></p>
             </div>
             <div class="col-md-6">
                 <h3 class="text-center">Recommendations {{ file.name }}</h3>
@@ -88,7 +95,8 @@
                 <h3>Consumables</h3>
                 <button class="btn btn-success" ng-click="openConsumable({}, true)">
                     <i class="glyphicon glyphicon-plus">
-                    </i> Add Consumable</button>
+                    </i> Add Consumable
+                </button>
                 <p></p>
                 <table ng-controller="ConsumableController" st-table="displayedCollection" st-safe-src="consumables"
                        class="table table-bordered table-hover table-responsive text-center">
@@ -140,7 +148,8 @@
                 <h3>Modifiers</h3>
                 <button class="btn btn-success" ng-click="openModifier({modifiers: []}, true)">
                     <i class="glyphicon glyphicon-plus">
-                    </i> Add Modifier</button>
+                    </i> Add Modifier
+                </button>
                 <p></p>
                 <table ng-controller="ModifierController" st-table="modifiersCollection" st-safe-src="modifiers"
                        class="table table-bordered table-hover table-responsive text-center">
@@ -162,7 +171,8 @@
                         <td>{{modifier._id}}</td>
                         <td>{{modifier.modifiers}}</td>
                         <td>
-                            <button class="btn btn-primary btn-sm" ng-click="openModifier(modifier, false)">Edit</button>
+                            <button class="btn btn-primary btn-sm" ng-click="openModifier(modifier, false)">Edit
+                            </button>
                         </td>
                         <td>
                             <button class="btn btn-danger btn-sm" ng-confirm-click="Are you sure to delete this item?"
@@ -178,7 +188,8 @@
                 <h3>Sizes</h3>
                 <button class="btn btn-success" ng-click="openSize({sizes: []}, true)">
                     <i class="glyphicon glyphicon-plus">
-                    </i> Add Size</button>
+                    </i> Add Size
+                </button>
                 <p></p>
                 <table ng-controller="SizeController" st-table="sizesCollection" st-safe-src="sizes"
                        class="table table-bordered table-hover table-responsive text-center">
@@ -239,6 +250,17 @@
         <modal visible="showSizeModal">
             <h2>Edit Size {{ model._id }}</h2>
             <div ng-controller="SizeController">
+                <form name="myForm"
+                      sf-schema="schema"
+                      sf-form="form"
+                      sf-model="model"
+                      ng-submit="onSubmit(myForm)"></form>
+            </div>
+        </modal>
+
+        <modal visible="showLocationModal">
+            <h2>Edit Location {{ model._id }}</h2>
+            <div ng-controller="LocationController">
                 <form name="myForm"
                       sf-schema="schema"
                       sf-form="form"

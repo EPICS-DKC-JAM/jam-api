@@ -5,12 +5,23 @@ var mongoose = require('mongoose');
 var autoIncrement = require('mongoose-auto-increment');
 var User = require('./user');
 var jwt = require('jsonwebtoken');
+var responseBuilder = require('./responseBuilder');
 
 var mongoUrl = config.mongoUrl;
 
 mongoose.connect(mongoUrl);
 autoIncrement.initialize(mongoose);
 
+var LocationSchema = new mongoose.Schema({
+    'name': String,
+    'address': String,
+    'city': String,
+    'country': String,
+    'traveling': false
+});
+
+LocationSchema.plugin(autoIncrement.plugin, 'Location');
+var Location = mongoose.model('Location', LocationSchema);
 
 router.get('/me', function (req, res) {
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
@@ -31,6 +42,70 @@ router.get('/me', function (req, res) {
             message: 'No token provided.'
         });
     }
+});
+
+// Location
+
+router.get('/location/show', function (request, response) {
+    Location.count(function (err, count) {
+        if (!err && count === 0) {
+            var locationToSave = new Location({
+                name: 'E3 Cafe',
+                address: '4 Cassia Park Road',
+                city: 'Kingston 10',
+                country: 'Jamaica',
+                traveling: false
+            });
+            locationToSave.save(function (err) {
+                Location.find(function (err, result) {
+                    if (err) {
+                        console.error(err);
+                        response.json({'data': null, 'success': false})
+                    }
+                    response.render('location', { location: result[0] })
+                });
+            });
+        } else {
+            Location.find(function (err, result) {
+                if (err) {
+                    console.error(err);
+                    response.json({'data': null, 'success': false})
+                }
+                response.render('location', { location: result[0] })
+            });
+        }
+    });
+});
+
+router.get('/location/current', function (request, response) {
+    Location.count(function (err, count) {
+        if (!err && count === 0) {
+            var locationToSave = new Location({
+                name: 'E3 Cafe',
+                address: '4 Cassia Park Road',
+                city: 'Kingston 10',
+                country: 'Jamaica'
+            });
+            locationToSave.save(function (err) {
+                Location.find(function (err, result) {
+                    if (err) {
+                        console.error(err);
+                        response.json({'data': null, 'success': false})
+                    }
+                    response.json({'data': result, 'success': true})
+                });
+
+            });
+        } else {
+            Location.find(function (err, result) {
+                if (err) {
+                    console.error(err);
+                    response.json({'data': null, 'success': false})
+                }
+                response.json({'data': result, 'success': true})
+            });
+        }
+    });
 });
 
 
@@ -89,4 +164,31 @@ router.use(function (req, res, next) {
     }
 });
 
+// Location
+router.post('/location/update', function (request, response) {
+    var data = request.body.data;
+    Location.remove({}, function () {
+        var status = saveLocation(data);
+        var payload = responseBuilder.buildResponse(response, null, false);
+
+        payload = responseBuilder.buildResponse(response, data, true);
+        response.json(payload)
+    })
+
+});
+
+
+function saveLocation(location) {
+    var locationToSave = new Location(location);
+    locationToSave.save(function (err) {
+        if (err) {
+            console.log(err);
+            return false;
+        }
+        else {
+            console.log(locationToSave);
+            return true;
+        }
+    });
+}
 module.exports = router;

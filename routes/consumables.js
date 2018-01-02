@@ -7,7 +7,6 @@ var sizes = require('./sizes');
 var modifiers = require('./modifiers');
 var jsonify = require('jsonify');
 
-
 // Mongo Object Declaration
 var ConsumableSchema = new mongoose.Schema({
     'name': String,
@@ -39,7 +38,6 @@ router.post('/upsert', function (request, response) {
     console.log(request.body);
     var data = request.body.data;
     var query = {'_id': data._id};
-
 
     if (!data._id) {
         var status = saveConsumable(data);

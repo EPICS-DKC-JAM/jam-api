@@ -1,6 +1,6 @@
 var token = '';
 
-angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload'])
+angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload', 'ngToast'])
     .controller('loginController', function ($scope, $http) {
         $scope.loggedIn = false;
 
@@ -78,6 +78,21 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
             $scope.sizes = response.data.data;
         });
 
+        $scope.openLocation = function (item) {
+            console.log($scope.model);
+            $scope.showLocationModal = true;
+            $scope.model = item;
+        };
+
+        $http({
+            url: 'location/current',
+            method: 'GET',
+            headers: {'x-access-token': token}
+        }).then(function (response) {
+            console.log(response.data);
+            $scope.location = response.data.data[0];
+        });
+
 
         $scope.deleteConsumable = function (id) {
             $http({
@@ -95,7 +110,52 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
                         console.log(response.data);
                         $scope.consumables.length = 0;
                         angular.extend($scope.consumables, response.data.data);
-                        //$scope.consumables = response.data.data;
+                    });
+                } else {
+
+                }
+            });
+        };
+
+        $scope.deleteModifier = function (id) {
+            $http({
+                url: 'modifiers/delete/' + id,
+                method: 'GET',
+                headers: {'x-access-token': token}
+            }).then(function (response) {
+                console.log(response)
+                if (response.data.success) {
+                    $http({
+                        url: 'modifiers/get/all',
+                        method: 'GET',
+                        headers: {'x-access-token': token}
+                    }).then(function (response) {
+                        console.log(response.data);
+                        $scope.modifiers.length = 0;
+                        angular.extend($scope.modifiers, response.data.data);
+                    });
+                } else {
+
+                }
+            });
+        };
+
+        $scope.deleteSize = function (id) {
+            $http({
+                url: 'sizes/delete/' + id,
+                method: 'GET',
+                headers: {'x-access-token': token}
+            }).then(function (response) {
+                console.log(response)
+                if (response.data.success) {
+                    $http({
+                        url: 'sizes/get/all',
+                        method: 'GET',
+                        headers: {'x-access-token': token}
+                    }).then(function (response) {
+                        console.log(response.data);
+                        $scope.sizes.length = 0;
+                        angular.extend($scope.sizes, response.data.data);
                     });
                 } else {
 
@@ -187,7 +247,8 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
                         headers: {'x-access-token': token}
                     }).then(function (response) {
                         console.log(response.data);
-                        $scope.modifiers = response.data.data;
+                        $scope.modifiers.length = 0;
+                        angular.extend($scope.modifiers, response.data.data);
                     });
                 });
             }
@@ -227,7 +288,8 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
                         headers: {'x-access-token': token}
                     }).then(function (response) {
                         console.log(response.data);
-                        $scope.sizes = response.data.data;
+                        $scope.sizes.length = 0;
+                        angular.extend($scope.sizes, response.data.data);
                     });
                 });
             }
@@ -248,6 +310,50 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
                 if (response.status > 0)
                     $scope.errorMsg = response.status + ': ' + response.data;
             });
+        }
+    })
+
+    .controller('LocationController', function ($scope, $http, ngToast) {
+        $scope.schema = {
+            type: "object",
+            properties: {
+                name: {type: "string", title: "Name"},
+                address: {type: "string", title: "Address"},
+                city: {type: "string", title: "City"},
+                country: {type: "string", title: "Country"},
+                traveling: {type: "boolean", title: "Traveling"}
+            }
+        };
+
+        $scope.form = [
+            "*",
+            {
+                type: "submit",
+                title: "Save"
+            }
+        ];
+
+        $scope.onSubmit = function (form, add) {
+            $scope.$broadcast('schemaFormValidate');
+            if (form.$valid) {
+                $http({
+                    url: 'location/update',
+                    method: 'POST',
+                    headers: {'x-access-token': token},
+                    data: {data: $scope.model}
+                }).then(function (response) {
+                    console.log('HERE');
+                    ngToast.create('Success!');
+                    $http({
+                        url: 'location/current',
+                        method: 'GET',
+                        headers: {'x-access-token': token}
+                    }).then(function (response) {
+                        console.log(response.data);
+                        $scope.location = response.data.data[0];
+                    });
+                });
+            }
         }
     })
 
