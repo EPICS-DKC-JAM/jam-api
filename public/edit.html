@@ -162,6 +162,7 @@
                     <tr>
                         <th st-ratio="6" st-sort="ModifierID">Modifier ID</th>
                         <th st-ratio="35" st-sort="Modifiers">Modifiers</th>
+                        <th st-ratio="8" st-sort="Price">Price</th>
                         <th st-ratio="4" st-sort="Edit"></th>
                         <th st-ratio="4" st-sort="Delete"></th>
                     </tr>
@@ -169,7 +170,16 @@
                     <tbody>
                     <tr ng-repeat="modifier in modifiersCollection">
                         <td>{{modifier._id}}</td>
-                        <td>{{modifier.modifiers}}</td>
+                        <td>
+                            <span ng-repeat="item in modifier.modifiers">
+                                {{ item.name }} <br>
+                            </span>
+                        </td>
+                        <td>
+                            <span ng-repeat="item in modifier.modifiers">
+                                {{ item.price }} <br>
+                            </span>
+                        </td>
                         <td>
                             <button class="btn btn-primary btn-sm" ng-click="openModifier(modifier, false)">Edit
                             </button>
@@ -202,6 +212,7 @@
                     <tr>
                         <th st-ratio="10" st-sort="SizeId">Size Id</th>
                         <th st-ratio="35" st-sort="Sizes">Sizes</th>
+                        <th st-ratio="8" st-sort="Price">Price</th>
                         <th st-ratio="4" st-sort="Edit"></th>
                         <th st-ratio="4" st-sort="Delete"></th>
                     </tr>
@@ -209,7 +220,16 @@
                     <tbody>
                     <tr ng-repeat="size in sizesCollection">
                         <td>{{size._id}}</td>
-                        <td>{{size.sizes}}</td>
+                        <td>
+                            <span ng-repeat="item in size.sizes">
+                                {{ item.name }} <br>
+                            </span>
+                        </td>
+                        <td>
+                            <span ng-repeat="item in size.sizes">
+                                {{ item.price }} <br>
+                            </span>
+                        </td> 
                         <td>
                             <button class="btn btn-primary btn-sm" ng-click="openSize(size, false)">Edit</button>
                         </td>

@@ -197,18 +197,15 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
                     headers: {'x-access-token': token},
                     data: {data: $scope.model}
                 }).then(function (response) {
-                    console.log(response.data.success);
-                    if (response.data.success) {
-                        $http({
-                            url: 'consumables/getRaw/all',
-                            method: 'GET',
-                            headers: {'x-access-token': token}
-                        }).then(function (response) {
-                            console.log(response.data);
-                            $scope.consumables.length = 0;
-                            angular.extend($scope.consumables, response.data.data);
-                        });
-                    }
+                    $http({
+                        url: 'consumables/getRaw/all',
+                        method: 'GET',
+                        headers: {'x-access-token': token}
+                    }).then(function (response) {
+                        console.log(response.data);
+                        $scope.consumables.length = 0;
+                        angular.extend($scope.consumables, response.data.data);
+                    });
                 });
             }
         }
@@ -218,7 +215,16 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
         $scope.schema = {
             type: "object",
             properties: {
-                modifiers: {type: "array", title: "Modifiers", items: {type: "string", minLength: 1, title: "  "}}
+                modifiers: {
+                    type: "array", title: "Modifiers",
+                    items: {
+                        type: "object", title: "  ",
+                        properties: {
+                            name: {type: "string", title: "Name"},
+                            price: {type: "number", title: "Price"}
+                        }
+                    }
+                }
             }
         };
 
@@ -259,7 +265,16 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
         $scope.schema = {
             type: "object",
             properties: {
-                sizes: {type: "array", title: "Sizes", items: {type: "string", minLength: 1, title: "  "}}
+                sizes: {
+                    type: "array", title: "Sizes",
+                    items: {
+                        type: "object", title: "  ",
+                        properties: {
+                            name: {type: "string", title: "Name"},
+                            price: {type: "number", title: "Price"}
+                        }
+                    }
+                }
             }
         };
 
