@@ -16,7 +16,10 @@ var ConsumableSchema = new mongoose.Schema({
     'itemImage': String,
     'caffeine': Boolean,
     'modifiers': Number,
-    'size': Number
+    'size': Number,
+    'category': String,
+    'shot': { enabled: Boolean, price: Number},
+    'cream': { enabled: Boolean, price: Number}
 });
 
 

@@ -112,7 +112,9 @@
                         <th st-ratio="4" st-sort="Price">Price</th>
                         <th st-ratio="4" st-sort="ModifierID">Modifier ID</th>
                         <th st-ratio="4" st-sort="SizeID">Size ID</th>
-                        <th st-ratio="4" st-sort="Caffeiene">Caffeine</th>
+                        <th st-ratio="4" st-sort="Cream">Cream</th>
+                        <th st-ratio="4" st-sort="Shot">Shot</th>
+                        <th st-ratio="4" st-sort="Category">Category</th>
                         <th st-ratio="4" st-sort="Edit"></th>
                         <th st-ratio="4" st-sort="Delete"></th>
                     </tr>
@@ -124,7 +126,9 @@
                         <td>{{consumable.price}}</td>
                         <td>{{consumable.modifiers}}</td>
                         <td>{{consumable.size}}</td>
-                        <td>{{consumable.caffeine}}</td>
+                        <td>{{consumable.shot.enabled}}</td>
+                        <td>{{consumable.cream.enabled}}</td>
+                        <td>{{consumable.category}}</td>
                         <td>
                             <button class="btn btn-primary btn-sm" ng-click="openConsumable(consumable, false)">Edit
                             </button>

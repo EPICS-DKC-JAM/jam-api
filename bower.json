@@ -27,7 +27,8 @@
     "ng-file-upload-shim": "^12.2.13",
     "angular-toastr": "^2.1.1",
     "socket.io": "^2.0.4",
-    "ngToast": "ngtoast#^2.0.0"
+    "ngToast": "ngtoast#^2.0.0",
+    "socket.io-client": "^2.0.4"
   },
   "resolutions": {
     "angular": "^1.6.7"
