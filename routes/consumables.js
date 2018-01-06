@@ -15,11 +15,11 @@ var ConsumableSchema = new mongoose.Schema({
     'jslImage': String,
     'itemImage': String,
     'caffeine': Boolean,
-    'modifiers': Number,
+    'modifiers': Array,
     'size': Number,
     'category': String,
-    'shot': { enabled: Boolean, price: Number},
-    'cream': { enabled: Boolean, price: Number}
+    'shot': {enabled: Boolean, price: Number},
+    'cream': {enabled: Boolean, price: Number}
 });
 
 
@@ -168,12 +168,19 @@ function prepareConsumable(consumable, callback) {
     var sizeId = consumable.size;
     var modifiersId = consumable.modifiers;
 
+
     sizes.getSizeById(sizeId, function (sizeResult) {
-        modifiers.getModifiersById(modifiersId, function (modifiersResult) {
-            consumable.size = sizeResult.sizes;
-            consumable.modifiers = modifiersResult.modifiers;
-            callback(consumable);
-        })
+        var completed = 0;
+        for (var i = 0; i < modifiersId.length; i++) {
+            modifiers.getModifiersById(modifiersId, function (modifiersResult) {
+                consumable.size = sizeResult.sizes;
+                consumable.modifiers = consumable.modifiers.concat(modifiersResult.modifiers);
+                completed++;
+                if (completed == modifiersId.length) {
+                    callback(consumable);
+                }
+            })
+        }
     });
     //consumable.modifers = modifiers.getModifiersById(modifiersId);
 }

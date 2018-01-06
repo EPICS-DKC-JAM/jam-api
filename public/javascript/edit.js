@@ -174,21 +174,43 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
                 jslImage: {type: "string", title: "JSL Image"},
                 itemImage: {type: "string", title: "Consumable Image"},
                 caffeine: {type: "boolean", title: "Caffeine"},
-                modifiers: {type: "integer", title: "Modifier ID"},
-                size: {type: "integer", title: "Size ID"},
-                category: {type: "string", title: "Category"},
+                modifiers: {
+                    type: "array", title: "Modifiers",
+                    items: {
+                        type: "integer", title: "Modifier ID"
+                    }
+                },
+                size: {
+                    type: "integer", title: "Size ID"
+                }
+                ,
+                category: {
+                    type: "string", title: "Category"
+                }
+                ,
                 shot: {
                     type: "object", title: "Shot",
                     properties: {
-                        enabled: {type: "boolean", title: "Enabled"},
-                        price: {type: "number", title: "Price"}
+                        enabled: {
+                            type: "boolean", title: "Enabled"
+                        }
+                        ,
+                        price: {
+                            type: "number", title: "Price"
+                        }
                     }
-                },
+                }
+                ,
                 cream: {
                     type: "object", title: "Cream",
                     properties: {
-                        enabled: {type: "boolean", title: "Enabled"},
-                        price: {type: "number", title: "Price"}
+                        enabled: {
+                            type: "boolean", title: "Enabled"
+                        }
+                        ,
+                        price: {
+                            type: "number", title: "Price"
+                        }
                     }
                 }
             }
@@ -226,233 +248,233 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
         }
     })
 
-        .controller('ModifierController', function ($scope, $http) {
-            $scope.schema = {
-                type: "object",
-                properties: {
-                    modifiers: {
-                        type: "array", title: "Modifiers",
-                        items: {
-                            type: "object", title: "  ",
-                            properties: {
-                                name: {type: "string", title: "Name"},
-                                price: {type: "number", title: "Price"}
-                            }
+    .controller('ModifierController', function ($scope, $http) {
+        $scope.schema = {
+            type: "object",
+            properties: {
+                modifiers: {
+                    type: "array", title: "Modifiers",
+                    items: {
+                        type: "object", title: "  ",
+                        properties: {
+                            name: {type: "string", title: "Name"},
+                            price: {type: "number", title: "Price"}
                         }
                     }
                 }
-            };
-
-            $scope.form = [
-                "*",
-                {
-                    type: "submit",
-                    title: "Save"
-                }
-            ];
-
-            $scope.onSubmit = function (form, add) {
-                $scope.$broadcast('schemaFormValidate');
-
-                if (form.$valid) {
-                    $http({
-                        url: 'modifiers/upsert',
-                        method: 'POST',
-                        headers: {'x-access-token': token},
-                        data: {data: $scope.model}
-                    }).then(function (response) {
-                        console.log(response.data);
-                        $http({
-                            url: 'modifiers/get/all',
-                            method: 'GET',
-                            headers: {'x-access-token': token}
-                        }).then(function (response) {
-                            console.log(response.data);
-                            $scope.modifiers.length = 0;
-                            angular.extend($scope.modifiers, response.data.data);
-                        });
-                    });
-                }
             }
-        })
+        };
 
-        .controller('SizeController', function ($scope, $http) {
-            $scope.schema = {
-                type: "object",
-                properties: {
-                    sizes: {
-                        type: "array", title: "Sizes",
-                        items: {
-                            type: "object", title: "  ",
-                            properties: {
-                                name: {type: "string", title: "Name"},
-                                price: {type: "number", title: "Price"}
-                            }
-                        }
-                    }
-                }
-            };
-
-            $scope.form = [
-                "*",
-                {
-                    type: "submit",
-                    title: "Save"
-                }
-            ];
-
-            $scope.onSubmit = function (form, add) {
-                $scope.$broadcast('schemaFormValidate');
-
-                if (form.$valid) {
-                    $http({
-                        url: 'sizes/upsert',
-                        method: 'POST',
-                        headers: {'x-access-token': token},
-                        data: {data: $scope.model}
-                    }).then(function (response) {
-                        console.log(response.data);
-                        $http({
-                            url: 'sizes/get/all',
-                            method: 'GET',
-                            headers: {'x-access-token': token}
-                        }).then(function (response) {
-                            console.log(response.data);
-                            $scope.sizes.length = 0;
-                            angular.extend($scope.sizes, response.data.data);
-                        });
-                    });
-                }
+        $scope.form = [
+            "*",
+            {
+                type: "submit",
+                title: "Save"
             }
-        })
+        ];
 
-        .controller('RecommendationController', function ($scope, Upload) {
-            $scope.uploadPic = function (file) {
-                file.upload = Upload.upload({
-                    url: 'recommendations/upload',
+        $scope.onSubmit = function (form, add) {
+            $scope.$broadcast('schemaFormValidate');
+
+            if (form.$valid) {
+                $http({
+                    url: 'modifiers/upsert',
+                    method: 'POST',
                     headers: {'x-access-token': token},
-                    data: {file: file}
-                });
-
-                console.log(file);
-                file.upload.then(function (response) {
-                }, function (response) {
-                    if (response.status > 0)
-                        $scope.errorMsg = response.status + ': ' + response.data;
-                });
-            }
-        })
-
-        .controller('LocationController', function ($scope, $http, ngToast) {
-            $scope.schema = {
-                type: "object",
-                properties: {
-                    name: {type: "string", title: "Name"},
-                    address: {type: "string", title: "Address"},
-                    city: {type: "string", title: "City"},
-                    country: {type: "string", title: "Country"},
-                    traveling: {type: "boolean", title: "Traveling"}
-                }
-            };
-
-            $scope.form = [
-                "*",
-                {
-                    type: "submit",
-                    title: "Save"
-                }
-            ];
-
-            $scope.onSubmit = function (form, add) {
-                $scope.$broadcast('schemaFormValidate');
-                if (form.$valid) {
+                    data: {data: $scope.model}
+                }).then(function (response) {
+                    console.log(response.data);
                     $http({
-                        url: 'location/update',
-                        method: 'POST',
-                        headers: {'x-access-token': token},
-                        data: {data: $scope.model}
+                        url: 'modifiers/get/all',
+                        method: 'GET',
+                        headers: {'x-access-token': token}
                     }).then(function (response) {
-                        console.log('HERE');
-                        ngToast.create('Success!');
-                        $http({
-                            url: 'location/current',
-                            method: 'GET',
-                            headers: {'x-access-token': token}
-                        }).then(function (response) {
-                            console.log(response.data);
-                            $scope.location = response.data.data[0];
-                        });
+                        console.log(response.data);
+                        $scope.modifiers.length = 0;
+                        angular.extend($scope.modifiers, response.data.data);
                     });
+                });
+            }
+        }
+    })
+
+    .controller('SizeController', function ($scope, $http) {
+        $scope.schema = {
+            type: "object",
+            properties: {
+                sizes: {
+                    type: "array", title: "Sizes",
+                    items: {
+                        type: "object", title: "  ",
+                        properties: {
+                            name: {type: "string", title: "Name"},
+                            price: {type: "number", title: "Price"}
+                        }
+                    }
                 }
             }
-        })
+        };
 
-        .directive('ngConfirmClick', [
-            function () {
-                return {
-                    link: function (scope, element, attr) {
-                        var msg = attr.ngConfirmClick || "Are you sure?";
-                        var clickAction = attr.confirmedClick;
-                        element.bind('click', function (event) {
-                            if (window.confirm(msg)) {
-                                scope.$eval(clickAction)
-                            }
-                        });
-                    }
-                };
-            }])
+        $scope.form = [
+            "*",
+            {
+                type: "submit",
+                title: "Save"
+            }
+        ];
 
-        .directive('modal', function () {
-            return {
-                template: '<div class="modal fade">' +
-                '<div class="container container-table">' +
-                '<div class="row vertical-center-row">' +
-                '<div class="jumbotron" align="center">' +
-                '<div class="modal-body" align="center" ng-transclude style="padding-bottom: 4%"></div>' +
-                '<button type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>',
-                restrict: 'E',
-                transclude: true,
-                replace: true,
-                scope: true,
-                link: function postLink(scope, element, attrs) {
-                    scope.title = attrs.title;
+        $scope.onSubmit = function (form, add) {
+            $scope.$broadcast('schemaFormValidate');
 
-                    scope.$watch(attrs.visible, function (value) {
-                        if (value === true)
-                            $(element).modal('show');
-                        else
-                            $(element).modal('hide');
+            if (form.$valid) {
+                $http({
+                    url: 'sizes/upsert',
+                    method: 'POST',
+                    headers: {'x-access-token': token},
+                    data: {data: $scope.model}
+                }).then(function (response) {
+                    console.log(response.data);
+                    $http({
+                        url: 'sizes/get/all',
+                        method: 'GET',
+                        headers: {'x-access-token': token}
+                    }).then(function (response) {
+                        console.log(response.data);
+                        $scope.sizes.length = 0;
+                        angular.extend($scope.sizes, response.data.data);
                     });
+                });
+            }
+        }
+    })
 
-                    $(element).on('shown.bs.modal', function () {
-                        scope.$apply(function () {
-                            scope.$parent[attrs.visible] = true;
-                        });
+    .controller('RecommendationController', function ($scope, Upload) {
+        $scope.uploadPic = function (file) {
+            file.upload = Upload.upload({
+                url: 'recommendations/upload',
+                headers: {'x-access-token': token},
+                data: {file: file}
+            });
+
+            console.log(file);
+            file.upload.then(function (response) {
+            }, function (response) {
+                if (response.status > 0)
+                    $scope.errorMsg = response.status + ': ' + response.data;
+            });
+        }
+    })
+
+    .controller('LocationController', function ($scope, $http, ngToast) {
+        $scope.schema = {
+            type: "object",
+            properties: {
+                name: {type: "string", title: "Name"},
+                address: {type: "string", title: "Address"},
+                city: {type: "string", title: "City"},
+                country: {type: "string", title: "Country"},
+                traveling: {type: "boolean", title: "Traveling"}
+            }
+        };
+
+        $scope.form = [
+            "*",
+            {
+                type: "submit",
+                title: "Save"
+            }
+        ];
+
+        $scope.onSubmit = function (form, add) {
+            $scope.$broadcast('schemaFormValidate');
+            if (form.$valid) {
+                $http({
+                    url: 'location/update',
+                    method: 'POST',
+                    headers: {'x-access-token': token},
+                    data: {data: $scope.model}
+                }).then(function (response) {
+                    console.log('HERE');
+                    ngToast.create('Success!');
+                    $http({
+                        url: 'location/current',
+                        method: 'GET',
+                        headers: {'x-access-token': token}
+                    }).then(function (response) {
+                        console.log(response.data);
+                        $scope.location = response.data.data[0];
                     });
+                });
+            }
+        }
+    })
 
-                    $(element).on('hidden.bs.modal', function () {
-                        scope.$apply(function () {
-                            scope.$parent[attrs.visible] = false;
-                        });
-                    });
-                }
-            };
-        })
-
-        .directive('stRatio', function () {
+    .directive('ngConfirmClick', [
+        function () {
             return {
                 link: function (scope, element, attr) {
-                    var ratio = +(attr.stRatio);
-
-                    element.css('width', ratio + '%');
-
+                    var msg = attr.ngConfirmClick || "Are you sure?";
+                    var clickAction = attr.confirmedClick;
+                    element.bind('click', function (event) {
+                        if (window.confirm(msg)) {
+                            scope.$eval(clickAction)
+                        }
+                    });
                 }
             };
-        });
+        }])
+
+    .directive('modal', function () {
+        return {
+            template: '<div class="modal fade">' +
+            '<div class="container container-table">' +
+            '<div class="row vertical-center-row">' +
+            '<div class="jumbotron" align="center">' +
+            '<div class="modal-body" align="center" ng-transclude style="padding-bottom: 4%"></div>' +
+            '<button type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>',
+            restrict: 'E',
+            transclude: true,
+            replace: true,
+            scope: true,
+            link: function postLink(scope, element, attrs) {
+                scope.title = attrs.title;
+
+                scope.$watch(attrs.visible, function (value) {
+                    if (value === true)
+                        $(element).modal('show');
+                    else
+                        $(element).modal('hide');
+                });
+
+                $(element).on('shown.bs.modal', function () {
+                    scope.$apply(function () {
+                        scope.$parent[attrs.visible] = true;
+                    });
+                });
+
+                $(element).on('hidden.bs.modal', function () {
+                    scope.$apply(function () {
+                        scope.$parent[attrs.visible] = false;
+                    });
+                });
+            }
+        };
+    })
+
+    .directive('stRatio', function () {
+        return {
+            link: function (scope, element, attr) {
+                var ratio = +(attr.stRatio);
+
+                element.css('width', ratio + '%');
+
+            }
+        };
+    });
 
 
 function bs_input_file() {
