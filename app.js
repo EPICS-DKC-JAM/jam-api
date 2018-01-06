@@ -58,8 +58,9 @@ ids = [];
 
 // Public APIs
 app.use('/', index);
-app.use('/', auth);
 app.use('/live', live);
+
+app.use('/', auth);
 // Secure APIs
 app.use('/consumables', consumables);
 app.use('/modifiers', modifiers);
