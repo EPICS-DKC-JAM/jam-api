@@ -3,16 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-animate/angular-animate.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-messages/angular-messages.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-aria/angular-aria.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-material/angular-material.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-smart-table/dist/smart-table.js"></script>
+    <script type="text/javascript" src="../bower_components/socket.io-client/dist/socket.io.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-socket-io/socket.js"></script>
+
+    <script type="text/javascript" src="javascript/live.js"></script>
+
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
 </head>
-<body>
-
-<script src="../bower_components/socket.io-client/dist/socket.io.js"></script>
-<script>
-    var socket = io('//localhost:3000');
-    socket.on('socketToMe', function (data) {
-        console.log(data);
-    });
-</script>
-
+<body ng-app="live">
+<div class="container container-fluid" ng-controller="loginController">
+    {{ items }}
+    <div class="row" ng-repeat="cart in carts">
+        <div class="col-md-12">
+            <table st-table="displayedCollection" st-safe-src="cart.items"
+                   class="table table-bordered table-hover table-responsive text-center">
+                <thead class="thead-dark">
+                <tr>
+                    <th>{{ cart.name }}
+                        <button class="btn btn-danger btn-sm"
+                                ng-confirm-click="Are you sure you want to delete this cart?"
+                                confirmed-click="deleteCart(cart.id)" aria-label="close">
+                            <span aria-hidden="true">Delete</span>
+                        </button>
+                    </th>
+                </tr>
+                <tr>
+                    <th st-ratio="10" st-sort="ItemName">Item Name</th>
+                    <th st-ratio="10" st-sort="Modifiers">Modifiers</th>
+                    <th st-ratio="10" st-sort="Size">Size</th>
+                    <th st-ratio="10" st-sort="Quantity">Quantity</th>
+                    <th st-ratio="10" st-sort="Price">Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="consumable in displayedCollection">
+                    <td>{{consumable.name}}</td>
+                    <td>{{consumable.modifiers}}</td>
+                    <td>{{consumable.size}}</td>
+                    <td>{{consumable.quantity}}</td>
+                    <td>{{consumable.price}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 </body>
 </html>

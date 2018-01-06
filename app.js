@@ -47,10 +47,14 @@ app.use(corser.create({
 }));
 
 // Socket IO
-app.use(function(req, res, next){
+app.use(function (req, res, next) {
     res.io = io;
     next();
 });
+
+// Live Cart Variable
+cart = [];
+ids = [];
 
 // Public APIs
 app.use('/', index);
