@@ -7,6 +7,13 @@ var sizes = require('./sizes');
 var modifiers = require('./modifiers');
 var jsonify = require('jsonify');
 
+
+router.get('/', function (req, res, next) {
+    res.io.emit("socketToMe", "users");
+    res.send('respond with a resource.');
+});
+
+
 router.post('/add', function (request, response) {
     console.log(request.body);
     var data = request.body.data;

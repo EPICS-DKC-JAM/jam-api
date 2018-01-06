@@ -14,14 +14,17 @@ var autoIncrement = require('mongoose-auto-increment');
 var User = require('./routes/user');
 var users = require('./routes/users');
 var auth = require('./routes/auth');
+var live = require('./routes/live');
 //var location = require('./routes/location');
 var corser = require('corser');
 var recommendations = require('./routes/recommendations');
 var images = require('./routes/images');
-var io = require('socket.io')(server);
-
 
 var app = express();
+
+// Socket IO
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 var config = require('./config');
 
@@ -44,19 +47,15 @@ app.use(corser.create({
 }));
 
 // Socket IO
-var server = require('http').Server(express);
-io.on('connection', function (socket) {
-    socket.emit('news', { hello: 'world' });
-    socket.on('my other event', function (data) {
-        console.log(data);
-    });
+app.use(function(req, res, next){
+    res.io = io;
+    next();
 });
 
 // Public APIs
 app.use('/', index);
-
 app.use('/', auth);
-
+app.use('/live', live);
 // Secure APIs
 app.use('/consumables', consumables);
 app.use('/modifiers', modifiers);
@@ -65,7 +64,6 @@ app.use('/users', users);
 app.use('/recommendations', recommendations);
 app.use('/images', images);
 //app.use('/test,', location);
-
 
 
 // Connect to Mongo
@@ -116,5 +114,5 @@ app.use(function (err, req, res, next) {
 });
 
 
-module.exports = app;
+module.exports = {app: app, server: server};
 

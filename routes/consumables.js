@@ -167,7 +167,7 @@ router.get('/testAdd', function (req, res) {
 function prepareConsumable(consumable, callback) {
     var sizeId = consumable.size;
     var modifiersId = consumable.modifiers;
-
+    consumable.modifiers = [];
 
     sizes.getSizeById(sizeId, function (sizeResult) {
         var completed = 0;
