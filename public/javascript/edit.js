@@ -240,6 +240,11 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
                         headers: {'x-access-token': token}
                     }).then(function (response) {
                         console.log(response.data);
+                        if (response.data.status) {
+                            alert('Saved!')
+                        } else {
+                            alert('Error saving...')
+                        }
                         $scope.consumables.length = 0;
                         angular.extend($scope.consumables, response.data.data);
                     });
@@ -290,6 +295,11 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
                         headers: {'x-access-token': token}
                     }).then(function (response) {
                         console.log(response.data);
+                        if (response.data.success) {
+                            alert('Saved!')
+                        } else {
+                            alert('Error saving...')
+                        }
                         $scope.modifiers.length = 0;
                         angular.extend($scope.modifiers, response.data.data);
                     });
@@ -340,6 +350,11 @@ angular.module('edit', ['schemaForm', 'ngMaterial', 'smart-table', 'ngFileUpload
                         headers: {'x-access-token': token}
                     }).then(function (response) {
                         console.log(response.data);
+                        if (response.data.success) {
+                            alert('Saved!')
+                        } else {
+                            alert('Error saving...')
+                        }
                         $scope.sizes.length = 0;
                         angular.extend($scope.sizes, response.data.data);
                     });
